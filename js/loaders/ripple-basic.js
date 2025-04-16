@@ -12,7 +12,7 @@
      * @param {Object} config - Configuration options
      * @returns {HTMLElement} Loader DOM element
      */
-    function create(config) {
+    function createLoader(config) {
         // Make sure we have valid config values
         const safeConfig = {
             color: config.color || "blue",
@@ -61,7 +61,7 @@
         container.updateColor = function (newColor, newShade) {
             const color = CXCLoader.getColor(newColor, newShade);
             const circles = this.querySelectorAll(".cxc-ripple-basic-circle");
-            circles.forEach(circle => {
+            circles.forEach((circle) => {
                 circle.style.border = `2px solid ${color}`;
             });
         };
@@ -77,7 +77,7 @@
      * @param {Object} config - Configuration options
      * @returns {string} CSS code
      */
-    function getCSS(config) {
+    function generateCSS(config) {
         const color = CXCLoader.getColor(config.color, config.shade);
         const animationDuration = (1.5 / config.speed).toFixed(2);
 
@@ -124,7 +124,7 @@
      * @param {Object} config - Configuration options
      * @returns {string} JS code
      */
-    function getJS(config) {
+    function generateJS(config) {
         const color = CXCLoader.getColor(config.color, config.shade);
         const animationDuration = (1.5 / config.speed).toFixed(2);
 
@@ -147,7 +147,7 @@ for (let i = 0; i < 3; i++) {
   circle.style.opacity = '0';
   circle.style.animation = 'ripple ${animationDuration}s ease-out infinite';
   circle.style.animationDelay = (i * 0.5).toFixed(1) + 's';
-  
+
   container.appendChild(circle);
 }
 
@@ -193,9 +193,14 @@ document.querySelector('.your-container').appendChild(container);
     }
 
     // Register loader
-    CXCLoader.registerLoader(CATEGORY, NAME, {
-        create,
-        getCSS,
-        getJS,
-    });
+    CXCLoader.registerLoader(CATEGORY, NAME, createLoader, generateCSS, generateJS);
+
+    // Log registration
+    console.log(`Registered loader: ${CATEGORY}-${NAME}`);
+
+    // Force registration to global object
+    if (!window.CXCLoader.loaderExists(CATEGORY, NAME)) {
+        console.warn(`Loader ${CATEGORY}-${NAME} not properly registered, forcing registration...`);
+        window.CXCLoader.registerLoader(CATEGORY, NAME, createLoader, generateCSS, generateJS);
+    }
 })();

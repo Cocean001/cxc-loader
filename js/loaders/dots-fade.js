@@ -58,7 +58,7 @@
         container.updateColor = function (newColor, newShade) {
             const color = CXCLoader.getColor(newColor, newShade);
             const dots = this.querySelectorAll(".cxc-dots-fade-dot");
-            dots.forEach(dot => {
+            dots.forEach((dot) => {
                 dot.style.backgroundColor = color;
             });
         };
@@ -140,7 +140,7 @@ for (let i = 0; i < 5; i++) {
   dot.style.opacity = '0.3';
   dot.style.animation = 'dotsFade ${animationDuration}s ease infinite';
   dot.style.animationDelay = (i * 0.2).toFixed(1) + 's';
-  
+
   container.appendChild(dot);
 }
 
@@ -174,9 +174,14 @@ document.querySelector('.your-container').appendChild(container);
     }
 
     // Register loader
-    CXCLoader.registerLoader(CATEGORY, NAME, {
-        create,
-        getCSS,
-        getJS,
-    });
+    CXCLoader.registerLoader(CATEGORY, NAME, create, getCSS, getJS);
+
+    // Log registration
+    console.log(`Registered loader: ${CATEGORY}-${NAME}`);
+
+    // Force registration to global object
+    if (!window.CXCLoader.loaderExists(CATEGORY, NAME)) {
+        console.warn(`Loader ${CATEGORY}-${NAME} not properly registered, forcing registration...`);
+        window.CXCLoader.registerLoader(CATEGORY, NAME, create, getCSS, getJS);
+    }
 })();

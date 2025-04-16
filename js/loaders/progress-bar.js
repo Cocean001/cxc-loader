@@ -5,14 +5,14 @@
 
 (function () {
     const CATEGORY = "progress";
-    const NAME = "bar";
+    const NAME = "bar"; // This will create a loader with ID "progress-bar"
 
     /**
      * Create loader DOM element
      * @param {Object} config - Configuration options
      * @returns {HTMLElement} Loader DOM element
      */
-    function create(config) {
+    function createLoader(config) {
         // Make sure we have valid config values
         const safeConfig = {
             color: config.color || "blue",
@@ -73,7 +73,7 @@
      * @param {Object} config - Configuration options
      * @returns {string} CSS code
      */
-    function getCSS(config) {
+    function generateCSS(config) {
         const color = CXCLoader.getColor(config.color, config.shade);
         const animationDuration = (3 / config.speed).toFixed(2);
 
@@ -107,7 +107,7 @@
      * @param {Object} config - Configuration options
      * @returns {string} JS code
      */
-    function getJS(config) {
+    function generateJS(config) {
         const color = CXCLoader.getColor(config.color, config.shade);
         const animationDuration = (3 / config.speed).toFixed(2);
 
@@ -161,9 +161,14 @@ document.querySelector('.your-container').appendChild(container);
     }
 
     // Register loader
-    CXCLoader.registerLoader(CATEGORY, NAME, {
-        create,
-        getCSS,
-        getJS,
-    });
+    CXCLoader.registerLoader(CATEGORY, NAME, createLoader, generateCSS, generateJS);
+
+    // Log registration
+    console.log(`Registered loader: ${CATEGORY}-${NAME}`);
+
+    // Force registration to global object
+    if (!window.CXCLoader.loaderExists(CATEGORY, NAME)) {
+        console.warn(`Loader ${CATEGORY}-${NAME} not properly registered, forcing registration...`);
+        window.CXCLoader.registerLoader(CATEGORY, NAME, createLoader, generateCSS, generateJS);
+    }
 })();

@@ -3,7 +3,6 @@
  * Contains metadata for all available loaders
  */
 
-// Loader data with metadata
 const loaderData = [
     {
         id: "spinner-basic",
@@ -17,77 +16,80 @@ const loaderData = [
         id: "spinner-dual",
         category: "spinner",
         name: "Dual Spinner",
-        tag: "S-002", // Second spinner
-        createdAt: "2023-06-20",
+        tag: "S-002",
+        createdAt: "2023-05-16",
         totalIndex: 2,
     },
     {
         id: "spinner-triple",
         category: "spinner",
         name: "Triple Spinner",
-        tag: "S-003", // Third spinner
-        createdAt: "2023-09-15",
-        totalIndex: 5,
+        tag: "S-003",
+        createdAt: "2023-05-17",
+        totalIndex: 3,
     },
     {
         id: "pulse-basic",
         category: "pulse",
-        name: "Pulse Loader",
-        tag: "P-001", // P for Pulse, 001 is the first in Pulse category
-        createdAt: "2023-07-10",
-        totalIndex: 3,
+        name: "Basic Pulse",
+        tag: "P-001", // P for Pulse
+        createdAt: "2023-05-18",
+        totalIndex: 4,
     },
     {
         id: "pulse-wave",
         category: "pulse",
-        name: "Pulse Wave",
-        tag: "P-002", // Second pulse
-        createdAt: "2023-09-18",
+        name: "Wave Pulse",
+        tag: "P-002",
+        createdAt: "2023-05-19",
+        totalIndex: 5,
+    },
+    {
+        id: "dots-default",
+        category: "dots",
+        name: "Default Dots",
+        tag: "D-001", // D for Dots
+        createdAt: "2023-05-20",
         totalIndex: 6,
+    },
+    {
+        id: "dots-basic",
+        category: "dots",
+        name: "Basic Dots",
+        tag: "D-002",
+        createdAt: "2023-05-21",
+        totalIndex: 7,
     },
     {
         id: "dots-bounce",
         category: "dots",
         name: "Bouncing Dots",
-        tag: "D-001", // D for Dots, 001 is the first in Dots category
-        createdAt: "2023-08-05",
-        totalIndex: 4,
+        tag: "D-003",
+        createdAt: "2023-05-22",
+        totalIndex: 8,
     },
     {
         id: "dots-fade",
         category: "dots",
         name: "Fading Dots",
-        tag: "D-002", // Second dots
-        createdAt: "2023-09-20",
-        totalIndex: 7,
+        tag: "D-004",
+        createdAt: "2023-05-23",
+        totalIndex: 9,
     },
     {
         id: "progress-bar",
         category: "progress",
         name: "Progress Bar",
-        tag: "PR-001", // PR for Progress, 001 is the first in Progress category
-        createdAt: "2023-09-22",
-        totalIndex: 8,
+        tag: "PB-001", // PB for Progress Bar
+        createdAt: "2023-05-24",
+        totalIndex: 10,
     },
     {
         id: "ripple-basic",
         category: "ripple",
         name: "Basic Ripple",
-        tag: "R-001", // R for Ripple, 001 is the first in Ripple category
-        createdAt: "2023-09-25",
-        totalIndex: 9,
+        tag: "R-001", // R for Ripple
+        createdAt: "2023-05-25",
+        totalIndex: 11,
     },
 ];
-
-// Sort loaders by creation date (newest first)
-loaderData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-// Current selected loader and configuration
-let currentLoader = {
-    id: "spinner-basic", // Default loader
-    config: {
-        color: "blue",
-        shade: 500,
-        speed: 1.0,
-    },
-};

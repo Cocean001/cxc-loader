@@ -3,178 +3,149 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>CXC Loader</title>
+        <title>CXC Loader - Elegant CSS Loaders</title>
+
+        <!-- Favicon -->
+        <link rel="icon" href="images/cxc_logo.png" type="image/png" />
+
         <!-- External CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" />
+
         <!-- Main CSS -->
         <link rel="stylesheet" href="css/styles.css" />
+        <link rel="stylesheet" href="css/loaders.css" />
 
         <!-- Loader Configuration and Modules -->
-        <!-- 确保按正确顺序加载 -->
-        <script src="loaders/loader-config.js"></script>
+        <script src="js/loader-config.js"></script>
         <script src="js/loaders-data.js"></script>
-        <script src="js/utils.js"></script>
-        <script src="loaders/spinner.js"></script>
-        <script src="loaders/spinner-dual.js"></script>
-        <script src="loaders/spinner-triple.js"></script>
-        <script src="loaders/pulse.js"></script>
-        <script src="loaders/pulse-wave.js"></script>
-        <script src="loaders/dots.js"></script>
-        <script src="loaders/dots-fade.js"></script>
-        <script src="loaders/progress-bar.js"></script>
-        <script src="loaders/ripple-basic.js"></script>
-        <script src="js/ui.js"></script>
-        <script src="js/main.js"></script>
+
+        <!-- Loader Scripts -->
+        <script src="js/loaders/test-loader.js"></script>
+        <script src="js/loaders/spinner-basic.js"></script>
+        <script src="js/loaders/spinner.js"></script>
+        <script src="js/loaders/spinner-dual.js"></script>
+        <script src="js/loaders/spinner-triple.js"></script>
+        <script src="js/loaders/pulse.js"></script>
+        <script src="js/loaders/pulse-wave.js"></script>
+        <script src="js/loaders/dots.js"></script>
+        <script src="js/loaders/dots-basic.js"></script>
+        <script src="js/loaders/dots-bounce.js"></script>
+        <script src="js/loaders/dots-fade.js"></script>
+        <script src="js/loaders/progress-bar.js"></script>
+        <script src="js/loaders/ripple-basic.js"></script>
+
+        <!-- Main Scripts -->
+        <script src="js/main.js" defer></script>
     </head>
     <body>
-        <div class="app-layout">
-            <div class="main-content">
-                <header>
-                    <div class="header-left">
-                        <div class="logo">CXC-Loader</div>
-                        <p class="subtitle">Elegant CSS loaders for Chatbots, AI and modern UI</p>
+        <div class="app-container">
+            <header class="main-header">
+                <div class="header-left">
+                    <div class="logo">
+                        <img src="images/cxc_logo.png" alt="CXC Logo" class="logo-img" />
+                        <h1>CXC-Loader</h1>
                     </div>
-                    <div class="header-right">
-                        <div class="search-wrapper">
-                            <button class="header-button" id="searchToggle" title="Search Loaders">
-                                <i class="fas fa-search"></i>
-                            </button>
-                            <div class="header-search-container" id="headerSearchContainer">
-                                <input type="text" id="headerSearchInput" class="header-search-input" placeholder="Search..." />
-                                <button id="headerClearSearch" class="header-clear-search" title="Clear search">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <a href="https://github.com/Cocean001/cxc-loader" class="header-button" title="View on GitHub" target="_blank">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <button class="header-button" id="themeToggle" title="Toggle Dark Mode">
-                            <i class="fas fa-moon"></i>
-                        </button>
-                    </div>
-                </header>
-
-                <main>
-                    <!-- Category Filter -->
-                    <div class="category-filter">
-                        <div class="main-categories">
-                            <button class="filter-option selected" data-category="all">All</button>
-                            <button class="filter-option" data-category="spinner">Spinners</button>
-                            <button class="filter-option" data-category="pulse">Pulse</button>
-                            <button class="filter-option" data-category="dots">Dots</button>
-                            <div class="selected-more-category" id="selectedMoreCategory"></div>
-                            <div class="more-categories">
-                                <button class="more-button" id="moreCategories">More <i class="fas fa-chevron-down"></i></button>
-                                <div class="more-dropdown" id="moreCategoriesDropdown">
-                                    <button class="filter-option more-option" data-category="progress">Progress</button>
-                                    <button class="filter-option more-option" data-category="ripple">Ripple</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="loaders-grid" id="loadersGrid">
-                        <!-- Loader cards will be dynamically generated here -->
-                    </div>
-                </main>
-
-                <footer>
-                    <p>CXC-Loader &copy; 2025 — <a href="https://github.com/Cocean001/cxc-loader" target="_blank">View on GitHub</a></p>
-                </footer>
-            </div>
-
-            <!-- Customize Button -->
-            <div class="customize-button" id="customizeButton" title="Customize Loaders">
-                <i class="fas fa-palette"></i>
-            </div>
-
-            <!-- Control Panel (Sidebar) -->
-            <div class="control-panel" id="controlPanel">
-                <div class="control-panel-title">
-                    <span>Customize Loaders</span>
-                    <button class="control-panel-close" id="closeControlPanel">
-                        <i class="fas fa-times"></i>
-                    </button>
+                    <p class="subtitle">Elegant CSS loaders for Chatbots, AI and modern UI</p>
                 </div>
+                <div class="header-right">
+                    <div class="search-container">
+                        <input type="text" id="searchInput" placeholder="Search loaders..." />
+                        <button id="searchButton"><i class="fas fa-search"></i></button>
+                    </div>
+                    <button id="themeToggle" class="theme-toggle" title="Toggle Dark Mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <a href="https://github.com/Cocean001/cxc-loader" class="github-link" target="_blank" title="View on GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </header>
 
+            <nav class="category-nav">
+                <button class="category-btn active" data-category="all">All</button>
+                <button class="category-btn" data-category="spinner">Spinners</button>
+                <button class="category-btn" data-category="pulse">Pulse</button>
+                <button class="category-btn" data-category="dots">Dots</button>
+                <button class="category-btn" data-category="progress">Progress</button>
+                <button class="category-btn" data-category="ripple">Ripple</button>
+            </nav>
+
+            <main class="main-content">
+                <div class="loaders-grid" id="loadersGrid">
+                    <!-- Loader cards will be dynamically generated here -->
+                </div>
+            </main>
+
+            <aside class="control-panel" id="controlPanel">
+                <div class="control-panel-header">
+                    <h3>Customize Loaders</h3>
+                    <button id="closePanel" class="close-btn"><i class="fas fa-times"></i></button>
+                </div>
                 <div class="control-section">
-                    <div class="control-group">
-                        <span class="control-group-title">Color</span>
-                        <div class="color-options" id="colorOptions"></div>
+                    <h4>Color</h4>
+                    <div class="color-options" id="colorOptions">
+                        <!-- Color options will be generated here -->
                     </div>
-
-                    <div class="control-group">
-                        <span class="control-group-title">Shade</span>
-                        <div class="shade-options" id="shadeOptions"></div>
+                </div>
+                <div class="control-section">
+                    <h4>Shade</h4>
+                    <div class="shade-options" id="shadeOptions">
+                        <!-- Shade options will be generated here -->
                     </div>
-
-                    <div class="control-group">
-                        <span class="control-group-title">Speed</span>
-                        <div class="speed-control-container">
-                            <div class="speed-value">
-                                <span>Slow</span>
-                                <span id="speedValue">1.0x</span>
-                                <span>Fast</span>
-                            </div>
-                            <input type="range" id="speedControl" class="speed-control" min="0.1" max="3" step="0.1" value="1" />
+                </div>
+                <div class="control-section">
+                    <h4>Speed</h4>
+                    <div class="speed-control">
+                        <input type="range" id="speedSlider" min="0.5" max="2" step="0.1" value="1" />
+                        <div class="speed-labels">
+                            <span>Slow</span>
+                            <span id="speedValue">1.0x</span>
+                            <span>Fast</span>
                         </div>
                     </div>
                 </div>
-            </div>
+            </aside>
 
-            <!-- Modal Structure -->
-            <div class="modal-overlay" id="loaderModal">
-                <div class="modal">
-                    <button class="modal-close" onclick="closeModal()">
-                        <i class="fas fa-times"></i>
-                    </button>
-                    <h2 class="modal-title" id="modalTitle">Loader Name</h2>
-                    <div class="modal-content">
-                        <div class="loader-demo" id="loaderDemo">
+            <button id="customizeBtn" class="customize-btn" title="Customize Loaders">
+                <i class="fas fa-palette"></i>
+            </button>
+
+            <div id="loaderModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 id="modalTitle">Loader Name</h2>
+                        <button id="closeModal" class="close-btn"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="loader-preview" id="loaderPreview">
                             <!-- Selected loader will be displayed here -->
                         </div>
-
-                        <div class="code-blocks">
-                            <div class="code-block">
+                        <div class="code-tabs">
+                            <button class="tab-btn active" data-tab="css">CSS</button>
+                            <button class="tab-btn" data-tab="js">JavaScript</button>
+                        </div>
+                        <div class="code-panels">
+                            <div class="code-panel active" id="cssPanel">
                                 <div class="code-header">
-                                    <div class="code-header-left">
-                                        <button class="code-toggle" id="toggleCssCode">
-                                            <i class="fas fa-chevron-down"></i>
-                                        </button>
-                                        <span class="code-title">CSS</span>
-                                    </div>
-                                    <div class="code-header-right">
-                                        <button class="copy-button" id="copyCssButton"><i class="fas fa-copy"></i> Copy</button>
-                                    </div>
+                                    <button id="copyCssBtn" class="copy-btn"><i class="fas fa-copy"></i> Copy</button>
                                 </div>
-                                <div class="code-snippet">
-                                    <pre><code id="cssCode" class="language-css">/* CSS code will appear here */</code></pre>
-                                </div>
-                                <button class="code-expand-btn" id="expandCssBtn">Show all code</button>
+                                <pre><code id="cssCode" class="language-css">/* CSS code will appear here */</code></pre>
                             </div>
-
-                            <div class="code-block">
+                            <div class="code-panel" id="jsPanel">
                                 <div class="code-header">
-                                    <div class="code-header-left">
-                                        <button class="code-toggle" id="toggleJsCode">
-                                            <i class="fas fa-chevron-down"></i>
-                                        </button>
-                                        <span class="code-title">JavaScript</span>
-                                    </div>
-                                    <div class="code-header-right">
-                                        <button class="copy-button" id="copyJsButton"><i class="fas fa-copy"></i> Copy</button>
-                                    </div>
+                                    <button id="copyJsBtn" class="copy-btn"><i class="fas fa-copy"></i> Copy</button>
                                 </div>
-                                <div class="code-snippet">
-                                    <pre><code id="jsCode" class="language-javascript">/* JavaScript code will appear here */</code></pre>
-                                </div>
-                                <button class="code-expand-btn" id="expandJsBtn">Show all code</button>
+                                <pre><code id="jsCode" class="language-javascript">// JavaScript code will appear here</code></pre>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <footer class="main-footer">
+                <p>&copy; 2023 CXC-Loader | <a href="https://github.com/Cocean001/cxc-loader" target="_blank">GitHub</a></p>
+            </footer>
         </div>
 
         <!-- Prism.js for syntax highlighting -->

@@ -3,53 +3,53 @@
  * A bouncing dots loader
  */
 
-(function() {
+(function () {
     // Category and name for this loader
-    const CATEGORY = 'dots';
-    const NAME = 'bounce';
-    
+    const CATEGORY = "dots";
+    const NAME = "bounce";
+
     // Create the loader element
     function createLoader(config) {
         // Create container
-        const container = document.createElement('div');
-        container.className = 'cxc-dots-bounce';
-        
+        const container = document.createElement("div");
+        container.className = "cxc-dots-bounce";
+
         // Create dots
         for (let i = 0; i < 3; i++) {
-            const dot = document.createElement('div');
-            dot.className = 'cxc-bounce-dot';
+            const dot = document.createElement("div");
+            dot.className = "cxc-bounce-dot";
             container.appendChild(dot);
         }
-        
+
         // Apply custom styles
         applyStyles(container, config);
-        
+
         return container;
     }
-    
+
     // Apply styles based on configuration
     function applyStyles(element, config) {
         const color = CXCLoader.getColor(config.color, config.shade);
-        const size = config.size || '10px';
-        const gap = config.gap || '5px';
+        const size = config.size || "10px";
+        const gap = config.gap || "5px";
         const speed = config.speed || 1.0;
-        const duration = (0.6 / speed).toFixed(2) + 's';
-        
+        const duration = (0.6 / speed).toFixed(2) + "s";
+
         // Set CSS variables
-        element.style.setProperty('--bounce-dots-color', color);
-        element.style.setProperty('--bounce-dots-size', size);
-        element.style.setProperty('--bounce-dots-gap', gap);
-        element.style.setProperty('--bounce-dots-duration', duration);
+        element.style.setProperty("--bounce-dots-color", color);
+        element.style.setProperty("--bounce-dots-size", size);
+        element.style.setProperty("--bounce-dots-gap", gap);
+        element.style.setProperty("--bounce-dots-duration", duration);
     }
-    
+
     // Generate CSS for this loader
     function generateCSS(config) {
         const color = CXCLoader.getColor(config.color, config.shade);
-        const size = config.size || '10px';
-        const gap = config.gap || '5px';
+        const size = config.size || "10px";
+        const gap = config.gap || "5px";
         const speed = config.speed || 1.0;
-        const duration = (0.6 / speed).toFixed(2) + 's';
-        
+        const duration = (0.6 / speed).toFixed(2) + "s";
+
         return `
 /* Bouncing Dots Loader */
 .cxc-dots-bounce {
@@ -83,7 +83,7 @@
     }
 }`;
     }
-    
+
     // Generate JS for this loader
     function generateJS(config) {
         return `
@@ -97,20 +97,20 @@ function createBouncingDots(config = {}) {
         gap: '5px',
         speed: ${config.speed}
     };
-    
+
     // Merge configurations
     const mergedConfig = {...defaultConfig, ...config};
-    
+
     // Create container
     const container = document.createElement('div');
     container.className = 'cxc-dots-bounce';
     container.style.display = 'flex';
     container.style.alignItems = 'center';
     container.style.gap = mergedConfig.gap;
-    
+
     // Get animation duration based on speed
     const duration = (0.6 / mergedConfig.speed).toFixed(2) + 's';
-    
+
     // Create dots
     for (let i = 0; i < 3; i++) {
         const dot = document.createElement('div');
@@ -120,17 +120,17 @@ function createBouncingDots(config = {}) {
         dot.style.backgroundColor = mergedConfig.color;
         dot.style.borderRadius = '50%';
         dot.style.animation = \`cxc-bounce-animation \${duration} infinite alternate\`;
-        
+
         // Set different delays for each dot
         if (i === 0) {
             dot.style.animationDelay = '-0.3s';
         } else if (i === 1) {
             dot.style.animationDelay = '-0.15s';
         }
-        
+
         container.appendChild(dot);
     }
-    
+
     // Add keyframes if they don't exist
     if (!document.getElementById('cxc-bounce-keyframes')) {
         const style = document.createElement('style');
@@ -147,11 +147,20 @@ function createBouncingDots(config = {}) {
         \`;
         document.head.appendChild(style);
     }
-    
+
     return container;
 }`;
     }
-    
+
     // Register this loader
     CXCLoader.registerLoader(CATEGORY, NAME, createLoader, generateCSS, generateJS);
+
+    // Log registration
+    console.log(`Registered loader: ${CATEGORY}-${NAME}`);
+
+    // Force registration to global object
+    if (!window.CXCLoader.loaderExists(CATEGORY, NAME)) {
+        console.warn(`Loader ${CATEGORY}-${NAME} not properly registered, forcing registration...`);
+        window.CXCLoader.registerLoader(CATEGORY, NAME, createLoader, generateCSS, generateJS);
+    }
 })();

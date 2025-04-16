@@ -79,12 +79,12 @@
             const color = CXCLoader.getColor(newColor, newShade);
             const centerDot = this.querySelector(".cxc-pulse-wave-center");
             const waves = this.querySelectorAll(".cxc-pulse-wave-ring");
-            
+
             if (centerDot) {
                 centerDot.style.backgroundColor = color;
             }
-            
-            waves.forEach(wave => {
+
+            waves.forEach((wave) => {
                 wave.style.border = `2px solid ${color}`;
             });
         };
@@ -198,7 +198,7 @@ for (let i = 0; i < 3; i++) {
   wave.style.opacity = '0';
   wave.style.animation = 'pulseWave ${animationDuration}s ease-out infinite';
   wave.style.animationDelay = (i * 0.6).toFixed(1) + 's';
-  
+
   container.appendChild(wave);
 }
 
@@ -246,9 +246,14 @@ document.querySelector('.your-container').appendChild(container);
     }
 
     // Register loader
-    CXCLoader.registerLoader(CATEGORY, NAME, {
-        create,
-        getCSS,
-        getJS,
-    });
+    CXCLoader.registerLoader(CATEGORY, NAME, create, getCSS, getJS);
+
+    // Log registration
+    console.log(`Registered loader: ${CATEGORY}-${NAME}`);
+
+    // Force registration to global object
+    if (!window.CXCLoader.loaderExists(CATEGORY, NAME)) {
+        console.warn(`Loader ${CATEGORY}-${NAME} not properly registered, forcing registration...`);
+        window.CXCLoader.registerLoader(CATEGORY, NAME, create, getCSS, getJS);
+    }
 })();

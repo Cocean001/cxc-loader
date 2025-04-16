@@ -3,46 +3,84 @@
  * A dual ring spinning loader
  */
 
-(function() {
+(function () {
     // Category and name for this loader
-    const CATEGORY = 'spinner';
-    const NAME = 'dual';
-    
+    const CATEGORY = "spinner";
+    const NAME = "dual";
+
     // Create the loader element
     function createLoader(config) {
         // Create container
-        const container = document.createElement('div');
-        container.className = 'cxc-spinner-dual';
-        
+        const container = document.createElement("div");
+        container.className = "cxc-spinner-dual";
+
         // Apply custom styles
         applyStyles(container, config);
-        
+
         return container;
     }
-    
+
     // Apply styles based on configuration
     function applyStyles(element, config) {
         const color = CXCLoader.getColor(config.color, config.shade);
-        const size = config.size || '40px';
-        const borderWidth = config.borderWidth || '4px';
+        const size = config.size || "40px";
+        const borderWidth = config.borderWidth || "4px";
         const speed = config.speed || 1.0;
-        const duration = (1.2 / speed).toFixed(2) + 's';
-        
-        // Set CSS variables
-        element.style.setProperty('--spinner-dual-color', color);
-        element.style.setProperty('--spinner-dual-size', size);
-        element.style.setProperty('--spinner-dual-border-width', borderWidth);
-        element.style.setProperty('--spinner-dual-duration', duration);
+        const duration = (1.2 / speed).toFixed(2) + "s";
+
+        // Apply styles directly
+        element.style.width = size;
+        element.style.height = size;
+        element.style.position = "relative";
+        element.style.display = "inline-block";
+
+        // Add the CSS for pseudo-elements
+        const styleId = "cxc-spinner-dual-style-" + Math.random().toString(36).substr(2, 9);
+        const style = document.createElement("style");
+        style.id = styleId;
+        style.textContent = `
+            .cxc-spinner-dual::after,
+            .cxc-spinner-dual::before {
+                content: '';
+                box-sizing: border-box;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                border: ${borderWidth} solid transparent;
+            }
+
+            .cxc-spinner-dual::before {
+                border-top-color: ${color};
+                border-bottom-color: ${color};
+                animation: cxc-spinner-dual-rotation-${styleId} ${duration} linear infinite;
+            }
+
+            .cxc-spinner-dual::after {
+                border-left-color: ${color};
+                border-right-color: ${color};
+                animation: cxc-spinner-dual-rotation-${styleId} ${duration} linear infinite reverse;
+            }
+
+            @keyframes cxc-spinner-dual-rotation-${styleId} {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Store the style ID for cleanup if needed
+        element.dataset.styleId = styleId;
     }
-    
+
     // Generate CSS for this loader
     function generateCSS(config) {
         const color = CXCLoader.getColor(config.color, config.shade);
-        const size = config.size || '40px';
-        const borderWidth = config.borderWidth || '4px';
+        const size = config.size || "40px";
+        const borderWidth = config.borderWidth || "4px";
         const speed = config.speed || 1.0;
-        const duration = (1.2 / speed).toFixed(2) + 's';
-        
+        const duration = (1.2 / speed).toFixed(2) + "s";
+
         return `
 /* Dual Spinner Loader */
 .cxc-spinner-dual {
@@ -84,7 +122,7 @@
     }
 }`;
     }
-    
+
     // Generate JS for this loader
     function generateJS(config) {
         return `
@@ -98,27 +136,27 @@ function createDualSpinner(config = {}) {
         borderWidth: '4px',
         speed: ${config.speed}
     };
-    
+
     // Merge configurations
     const mergedConfig = {...defaultConfig, ...config};
-    
+
     // Create container
     const spinner = document.createElement('div');
     spinner.className = 'cxc-spinner-dual';
-    
+
     // Apply styles
     const color = mergedConfig.color;
     const size = mergedConfig.size;
     const borderWidth = mergedConfig.borderWidth;
     const speed = mergedConfig.speed;
     const duration = (1.2 / speed).toFixed(2) + 's';
-    
+
     // Set inline styles
     spinner.style.width = size;
     spinner.style.height = size;
     spinner.style.position = 'relative';
     spinner.style.display = 'inline-block';
-    
+
     // Add the CSS for pseudo-elements
     const styleId = 'cxc-spinner-dual-style';
     if (!document.getElementById(styleId)) {
@@ -135,19 +173,19 @@ function createDualSpinner(config = {}) {
                 border-radius: 50%;
                 border: \${borderWidth} solid transparent;
             }
-            
+
             .cxc-spinner-dual::before {
                 border-top-color: \${color};
                 border-bottom-color: \${color};
                 animation: cxc-spinner-dual-rotation \${duration} linear infinite;
             }
-            
+
             .cxc-spinner-dual::after {
                 border-left-color: \${color};
                 border-right-color: \${color};
                 animation: cxc-spinner-dual-rotation \${duration} linear infinite reverse;
             }
-            
+
             @keyframes cxc-spinner-dual-rotation {
                 0% { transform: rotate(0deg); }
                 100% { transform: rotate(360deg); }
@@ -155,11 +193,20 @@ function createDualSpinner(config = {}) {
         \`;
         document.head.appendChild(style);
     }
-    
+
     return spinner;
 }`;
     }
-    
+
     // Register this loader
     CXCLoader.registerLoader(CATEGORY, NAME, createLoader, generateCSS, generateJS);
+
+    // Log registration
+    console.log(`Registered loader: ${CATEGORY}-${NAME}`);
+
+    // Force registration to global object
+    if (!window.CXCLoader.loaderExists(CATEGORY, NAME)) {
+        console.warn(`Loader ${CATEGORY}-${NAME} not properly registered, forcing registration...`);
+        window.CXCLoader.registerLoader(CATEGORY, NAME, createLoader, generateCSS, generateJS);
+    }
 })();
