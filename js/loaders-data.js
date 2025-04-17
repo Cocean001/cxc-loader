@@ -5,20 +5,36 @@
 
 const loaderData = [
     {
-        id: "wave-ai-pulse",
-        category: "wave",
-        name: "AI Pulse Wave",
-        tag: "W-002",
-        createdAt: "2024-07-08",
+        id: "fluid-liquid",
+        category: "fluid",
+        name: "Liquid Sphere",
+        tag: "F-004",
+        createdAt: "2024-07-14",
         totalIndex: 1,
+    },
+    {
+        id: "wave-audio",
+        category: "wave",
+        name: "Audio Wave",
+        tag: "W-003",
+        createdAt: "2024-07-12",
+        totalIndex: 4,
+    },
+    {
+        id: "wave-ripple",
+        category: "wave",
+        name: "Ripple Wave",
+        tag: "W-002",
+        createdAt: "2024-07-11",
+        totalIndex: 5,
     },
     {
         id: "wave-oscillate",
         category: "wave",
         name: "Oscillate Wave",
-        tag: "W-003",
+        tag: "W-001",
         createdAt: "2024-07-07",
-        totalIndex: 2,
+        totalIndex: 6,
     },
 
     {
@@ -33,9 +49,9 @@ const loaderData = [
         id: "spinner-siri-wave",
         category: "wave",
         name: "Siri Wave",
-        tag: "W-001",
+        tag: "W-007",
         createdAt: "2024-07-03",
-        totalIndex: 3,
+        totalIndex: 7,
     },
     {
         id: "spinner-circular",

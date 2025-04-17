@@ -17,11 +17,11 @@
         const safeConfig = {
             color: config.color || "blue",
             shade: config.shade || 500,
-            speed: config.speed || 1.0,
+            speed: config.speed || 1.5, // Increased default speed
         };
 
         const color = CXCLoader.getColor(safeConfig.color, safeConfig.shade);
-        const animationDuration = (3 / safeConfig.speed).toFixed(2);
+        const animationDuration = (2 / safeConfig.speed).toFixed(2); // Reduced base duration for faster animation
 
         // Create a lighter shade for glow effects
         const rgbColor = hexToRgb(color);
@@ -76,7 +76,7 @@
 
         // Add a method to update the speed
         container.updateSpeed = function (newSpeed) {
-            const newDuration = (3 / newSpeed).toFixed(2);
+            const newDuration = (2 / newSpeed).toFixed(2); // Reduced base duration for faster animation
             const indicator = this.querySelector(".cxc-spinner-circular-indicator");
             if (indicator) {
                 indicator.style.animation = `cxcSpinnerCircularRotate ${newDuration}s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite`;
@@ -119,7 +119,7 @@
      */
     function generateCSS(config) {
         const color = CXCLoader.getColor(config.color, config.shade);
-        const animationDuration = (3 / config.speed).toFixed(2);
+        const animationDuration = (2 / config.speed).toFixed(2); // Reduced base duration for faster animation
 
         // Create a lighter shade for glow effects
         const rgbColor = hexToRgb(color);
@@ -183,7 +183,7 @@
      */
     function generateJS(config) {
         const color = CXCLoader.getColor(config.color, config.shade);
-        const animationDuration = (3 / config.speed).toFixed(2);
+        const animationDuration = (2 / config.speed).toFixed(2); // Reduced base duration for faster animation
 
         // Create a lighter shade for glow effects
         const rgbColor = hexToRgb(color);

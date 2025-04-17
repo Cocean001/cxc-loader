@@ -135,8 +135,8 @@ function initLoaderCards() {
         // Options for the observer
         const options = {
             root: null, // viewport is the root
-            rootMargin: "100px", // load when within 100px of viewport
-            threshold: 0.1, // trigger when 10% of the element is visible
+            rootMargin: "200px", // load when within 200px of viewport
+            threshold: 0.01, // trigger when 1% of the element is visible
         };
 
         // Create a map to track which cards have been loaded
@@ -175,13 +175,18 @@ function initLoaderCards() {
             observer.observe(card);
         });
 
-        // Load the first row immediately (typically 4 cards per row)
-        const firstRowCards = Array.from(document.querySelectorAll(".loader-card")).slice(0, 4);
+        // Load the first two rows immediately (typically 4 cards per row)
+        const firstRowCards = Array.from(document.querySelectorAll(".loader-card")).slice(0, 8);
         firstRowCards.forEach((card) => {
             loadCard(card);
             loadedCards.set(card.dataset.loaderId, true);
             observer.unobserve(card);
         });
+
+        // Force a scroll event to trigger the observer
+        setTimeout(() => {
+            window.dispatchEvent(new Event("scroll"));
+        }, 500);
     }
 
     // Function to load a single card
@@ -246,6 +251,12 @@ function initLoaderCards() {
             } else if (loaderId === "spinner-fluid-orbit") {
                 loaderCategory = "spinner";
                 loaderType = "fluid-orbit";
+            } else if (loaderId === "wave-oscillate") {
+                loaderCategory = "wave";
+                loaderType = "oscillate";
+            } else if (loaderId === "fluid-liquid") {
+                loaderCategory = "fluid";
+                loaderType = "liquid";
             }
 
             if (CXCLoader.loaderExists(loaderCategory, loaderType)) {
@@ -341,6 +352,9 @@ function openLoaderModal(loaderId) {
     } else if (loaderId === "spinner-fluid-orbit") {
         loaderCategory = "spinner";
         loaderType = "fluid-orbit";
+    } else if (loaderId === "fluid-liquid") {
+        loaderCategory = "fluid";
+        loaderType = "liquid";
     }
 
     try {
@@ -448,6 +462,12 @@ function updateCodeSnippets(category, type) {
     } else if (category === "spinner" && type === "fluid-orbit") {
         loaderCategory = "spinner";
         loaderType = "fluid-orbit";
+    } else if (category === "wave" && type === "oscillate") {
+        loaderCategory = "wave";
+        loaderType = "oscillate";
+    } else if (category === "fluid" && type === "liquid") {
+        loaderCategory = "fluid";
+        loaderType = "liquid";
     }
 
     // Get current config
@@ -564,6 +584,12 @@ function updateModalContent() {
         } else if (loaderId === "spinner-fluid-orbit") {
             loaderCategory = "spinner";
             loaderType = "fluid-orbit";
+        } else if (loaderId === "wave-oscillate") {
+            loaderCategory = "wave";
+            loaderType = "oscillate";
+        } else if (loaderId === "fluid-liquid") {
+            loaderCategory = "fluid";
+            loaderType = "liquid";
         }
 
         // Update loader preview
@@ -1779,7 +1805,9 @@ function handlePageLoading() {
 
             // Remove the loader from DOM after animation completes
             setTimeout(() => {
-                pageLoader.remove();
+                if (pageLoader.parentNode) {
+                    pageLoader.remove();
+                }
             }, 500);
         }, 1000); // Show loader for at least 1 second after full page load
     });
@@ -1794,7 +1822,12 @@ function handlePageLoading() {
                 }
             }, 500);
         }
-    }, 5000); // Failsafe timeout of 5 seconds
+    }, 3000); // Failsafe timeout of 3 seconds
+
+    // Force a scroll event to trigger lazy loading
+    setTimeout(() => {
+        window.dispatchEvent(new Event("scroll"));
+    }, 2000);
 }
 
 // Initialize everything when DOM is loaded
