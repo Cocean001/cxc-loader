@@ -1698,15 +1698,30 @@ function handlePageLoading() {
     const pageLoader = document.getElementById("pageLoader");
     if (!pageLoader) return;
 
-    // Hide the loader after initialization is complete
-    setTimeout(() => {
-        pageLoader.classList.add("hidden");
-
-        // Remove the loader from DOM after animation completes
+    // Add a failsafe to ensure the loader is removed even if there are errors
+    window.addEventListener("load", () => {
+        // Hide the loader after initialization is complete
         setTimeout(() => {
-            pageLoader.remove();
-        }, 500);
-    }, 2000); // Show loader for at least 2 seconds
+            pageLoader.classList.add("hidden");
+
+            // Remove the loader from DOM after animation completes
+            setTimeout(() => {
+                pageLoader.remove();
+            }, 500);
+        }, 1000); // Show loader for at least 1 second after full page load
+    });
+
+    // Backup timeout to ensure loader is removed even if 'load' event doesn't fire
+    setTimeout(() => {
+        if (pageLoader.parentNode) {
+            pageLoader.classList.add("hidden");
+            setTimeout(() => {
+                if (pageLoader.parentNode) {
+                    pageLoader.remove();
+                }
+            }, 500);
+        }
+    }, 5000); // Failsafe timeout of 5 seconds
 }
 
 // Initialize everything when DOM is loaded
