@@ -368,4 +368,9 @@ function createParticleConverge(config = {}) {
         console.warn(`Loader ${CATEGORY}-${NAME} not properly registered, forcing registration...`);
         window.CXCLoader.registerLoader(CATEGORY, NAME, createLoader, generateCSS, generateJS);
     }
+
+    // Expose the create function globally for direct access
+    window.createParticleConverge = function (config = {}) {
+        return createLoader(config);
+    };
 })();

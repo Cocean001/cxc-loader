@@ -173,9 +173,19 @@ function initLoaderCards() {
                     } else if (loader.id === "pulse-whisper-float") {
                         loaderCategory = "pulse";
                         loaderType = "whisper-float";
+                        // Force registration if needed
+                        if (!CXCLoader.loaderExists(loaderCategory, loaderType)) {
+                            console.log(`Forcing registration for ${loaderCategory}-${loaderType}`);
+                            window.CXCLoader.registerLoader(loaderCategory, loaderType, window.createWhisperFloat);
+                        }
                     } else if (loader.id === "pulse-particle-converge") {
                         loaderCategory = "pulse";
                         loaderType = "particle-converge";
+                        // Force registration if needed
+                        if (!CXCLoader.loaderExists(loaderCategory, loaderType)) {
+                            console.log(`Forcing registration for ${loaderCategory}-${loaderType}`);
+                            window.CXCLoader.registerLoader(loaderCategory, loaderType, window.createParticleConverge);
+                        }
                     } else if (loader.id === "dots-bounce") {
                         loaderCategory = "dots";
                         loaderType = "bounce";
@@ -258,9 +268,19 @@ function openLoaderModal(loaderId) {
     } else if (loaderId === "pulse-whisper-float") {
         loaderCategory = "pulse";
         loaderType = "whisper-float";
+        // Force registration if needed
+        if (!CXCLoader.loaderExists(loaderCategory, loaderType)) {
+            console.log(`Forcing registration for ${loaderCategory}-${loaderType}`);
+            window.CXCLoader.registerLoader(loaderCategory, loaderType, window.createWhisperFloat);
+        }
     } else if (loaderId === "pulse-particle-converge") {
         loaderCategory = "pulse";
         loaderType = "particle-converge";
+        // Force registration if needed
+        if (!CXCLoader.loaderExists(loaderCategory, loaderType)) {
+            console.log(`Forcing registration for ${loaderCategory}-${loaderType}`);
+            window.CXCLoader.registerLoader(loaderCategory, loaderType, window.createParticleConverge);
+        }
     } else if (loaderId === "dots-bounce") {
         loaderCategory = "dots";
         loaderType = "bounce";
@@ -314,9 +334,19 @@ function updateCodeSnippets(category, type) {
     } else if (category === "pulse" && type === "whisper-float") {
         loaderCategory = "pulse";
         loaderType = "whisper-float";
+        // Force registration if needed
+        if (!CXCLoader.loaderExists(loaderCategory, loaderType)) {
+            console.log(`Forcing registration for ${loaderCategory}-${loaderType}`);
+            window.CXCLoader.registerLoader(loaderCategory, loaderType, window.createWhisperFloat);
+        }
     } else if (category === "pulse" && type === "particle-converge") {
         loaderCategory = "pulse";
         loaderType = "particle-converge";
+        // Force registration if needed
+        if (!CXCLoader.loaderExists(loaderCategory, loaderType)) {
+            console.log(`Forcing registration for ${loaderCategory}-${loaderType}`);
+            window.CXCLoader.registerLoader(loaderCategory, loaderType, window.createParticleConverge);
+        }
     } else if (category === "dots" && type === "bounce") {
         loaderCategory = "dots";
         loaderType = "bounce";
@@ -391,9 +421,19 @@ function updateModalContent() {
         } else if (loaderId === "pulse-whisper-float") {
             loaderCategory = "pulse";
             loaderType = "whisper-float";
+            // Force registration if needed
+            if (!CXCLoader.loaderExists(loaderCategory, loaderType)) {
+                console.log(`Forcing registration for ${loaderCategory}-${loaderType}`);
+                window.CXCLoader.registerLoader(loaderCategory, loaderType, window.createWhisperFloat);
+            }
         } else if (loaderId === "pulse-particle-converge") {
             loaderCategory = "pulse";
             loaderType = "particle-converge";
+            // Force registration if needed
+            if (!CXCLoader.loaderExists(loaderCategory, loaderType)) {
+                console.log(`Forcing registration for ${loaderCategory}-${loaderType}`);
+                window.CXCLoader.registerLoader(loaderCategory, loaderType, window.createParticleConverge);
+            }
         } else if (loaderId === "dots-bounce") {
             loaderCategory = "dots";
             loaderType = "bounce";
