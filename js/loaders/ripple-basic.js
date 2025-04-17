@@ -25,8 +25,8 @@
 
         const container = document.createElement("div");
         container.className = "cxc-ripple-basic";
-        container.style.width = "40px";
-        container.style.height = "40px";
+        container.style.width = "72px";
+        container.style.height = "72px";
         container.style.position = "relative";
 
         // Create three ripple circles
@@ -82,8 +82,8 @@
         const animationDuration = (1.5 / config.speed).toFixed(2);
 
         return `.cxc-ripple-basic {
-  width: 40px;
-  height: 40px;
+  width: 72px;
+  height: 72px;
   position: relative;
 }
 
@@ -130,8 +130,8 @@
 
         return `// Create a ripple effect animation
 const container = document.createElement('div');
-container.style.width = '40px';
-container.style.height = '40px';
+container.style.width = '72px';
+container.style.height = '72px';
 container.style.position = 'relative';
 
 // Create three ripple circles

@@ -75,6 +75,16 @@ function initLoaderCards() {
         return categoryMatch && searchMatch;
     });
 
+    // Sort loaders by category and then by tag
+    filteredLoaders.sort((a, b) => {
+        // First sort by category
+        if (a.category !== b.category) {
+            return a.category.localeCompare(b.category);
+        }
+        // Then sort by tag
+        return a.tag.localeCompare(b.tag);
+    });
+
     // Display message if no loaders match the filters
     if (filteredLoaders.length === 0) {
         const noResults = document.createElement("div");
@@ -85,79 +95,124 @@ function initLoaderCards() {
     }
 
     // Create cards for each loader
-    filteredLoaders.forEach((loader) => {
-        // Create card element
-        const card = document.createElement("div");
-        card.className = "loader-card";
-        card.dataset.category = loader.category;
-        card.dataset.loaderId = loader.id;
+    const createCards = () => {
+        // Create all card elements first without loaders
+        filteredLoaders.forEach((loader) => {
+            // Create card element
+            const card = document.createElement("div");
+            card.className = "loader-card";
+            card.dataset.category = loader.category;
+            card.dataset.loaderId = loader.id;
 
-        // Add click event to open modal
-        card.addEventListener("click", () => openLoaderModal(loader.id));
+            // Add click event to open modal
+            card.addEventListener("click", () => openLoaderModal(loader.id));
 
-        // Create tag element
-        const tag = document.createElement("div");
-        tag.className = "loader-tag";
-        tag.dataset.category = loader.category;
-        tag.textContent = loader.tag;
-        card.appendChild(tag);
+            // Create tag element
+            const tag = document.createElement("div");
+            tag.className = "loader-tag";
+            tag.dataset.category = loader.category;
+            tag.textContent = loader.tag;
+            card.appendChild(tag);
 
-        // Create placeholder for loader
-        const placeholder = document.createElement("div");
-        placeholder.className = "loader-placeholder";
-        card.appendChild(placeholder);
+            // Create placeholder for loader
+            const placeholder = document.createElement("div");
+            placeholder.className = "loader-placeholder";
+            placeholder.innerHTML = '<div class="loader-loading"></div>';
+            card.appendChild(placeholder);
 
-        // Create name element
-        const name = document.createElement("div");
-        name.className = "loader-name";
-        name.textContent = loader.name;
-        card.appendChild(name);
+            // Create name element
+            const name = document.createElement("div");
+            name.className = "loader-name";
+            name.textContent = loader.name;
+            card.appendChild(name);
 
-        // Add card to grid
-        loadersGrid.appendChild(card);
+            // Add card to grid
+            loadersGrid.appendChild(card);
+        });
 
-        // Create loader with a small delay to ensure DOM is ready
-        setTimeout(() => {
-            try {
-                const [category, type] = loader.id.split("-");
+        // Then load loaders in batches to prevent UI freezing
+        const batchSize = 4; // Process 4 loaders at a time
+        let currentIndex = 0;
 
-                // Map loader IDs to correct category/type
-                let loaderCategory = category;
-                let loaderType = type;
+        function loadNextBatch() {
+            if (currentIndex >= filteredLoaders.length) return;
 
-                // Special cases for loader IDs
-                if (loader.id === "dots-default") {
-                    loaderCategory = "dots";
-                    loaderType = "default";
-                } else if (loader.id === "pulse-basic") {
-                    loaderCategory = "pulse";
-                    loaderType = "basic";
-                } else if (loader.id === "spinner-basic") {
-                    // spinner-basic could be either in spinner.js or spinner-basic.js
-                    if (!CXCLoader.loaderExists("spinner", "basic")) {
-                        console.log("Trying alternative registration for spinner-basic");
-                        // Try to register it manually
-                        if (typeof createBasicSpinner === "function") {
-                            CXCLoader.registerLoader("spinner", "basic", createBasicSpinner);
+            const endIndex = Math.min(currentIndex + batchSize, filteredLoaders.length);
+            const batch = filteredLoaders.slice(currentIndex, endIndex);
+
+            batch.forEach((loader) => {
+                const card = document.querySelector(`.loader-card[data-loader-id="${loader.id}"]`);
+                if (!card) return;
+
+                const placeholder = card.querySelector(".loader-placeholder");
+                if (!placeholder) return;
+
+                try {
+                    const [category, type] = loader.id.split("-");
+
+                    // Map loader IDs to correct category/type
+                    let loaderCategory = category;
+                    let loaderType = type;
+
+                    // Special cases for loader IDs
+                    if (loader.id === "dots-default") {
+                        loaderCategory = "dots";
+                        loaderType = "default";
+                    } else if (loader.id === "pulse-basic") {
+                        loaderCategory = "pulse";
+                        loaderType = "basic";
+                    } else if (loader.id === "spinner-basic") {
+                        // spinner-basic could be either in spinner.js or spinner-basic.js
+                        if (!CXCLoader.loaderExists("spinner", "basic")) {
+                            console.log("Trying alternative registration for spinner-basic");
+                            // Try to register it manually
+                            if (typeof createBasicSpinner === "function") {
+                                CXCLoader.registerLoader("spinner", "basic", createBasicSpinner);
+                            }
                         }
+                    } else if (loader.id === "pulse-whisper-float") {
+                        loaderCategory = "pulse";
+                        loaderType = "whisper-float";
+                    } else if (loader.id === "pulse-particle-converge") {
+                        loaderCategory = "pulse";
+                        loaderType = "particle-converge";
+                    } else if (loader.id === "dots-bounce") {
+                        loaderCategory = "dots";
+                        loaderType = "bounce";
+                    } else if (loader.id === "spinner-triple") {
+                        loaderCategory = "spinner";
+                        loaderType = "triple";
                     }
-                }
 
-                if (CXCLoader.loaderExists(loaderCategory, loaderType)) {
-                    const loaderElement = CXCLoader.createLoader(loaderCategory, loaderType);
-                    placeholder.innerHTML = "";
-                    placeholder.appendChild(loaderElement);
-                    card.classList.add("loader-loaded");
-                } else {
-                    console.warn(`Loader ${loader.id} (${loaderCategory}-${loaderType}) not found in registry`);
-                    placeholder.innerHTML = `<div class="error-message">Loader not available</div>`;
+                    if (CXCLoader.loaderExists(loaderCategory, loaderType)) {
+                        const loaderElement = CXCLoader.createLoader(loaderCategory, loaderType);
+                        placeholder.innerHTML = "";
+                        placeholder.appendChild(loaderElement);
+                        card.classList.add("loader-loaded");
+                    } else {
+                        console.warn(`Loader ${loader.id} (${loaderCategory}-${loaderType}) not found in registry`);
+                        placeholder.innerHTML = `<div class="error-message">Loader not available</div>`;
+                    }
+                } catch (error) {
+                    console.error(`Error creating loader ${loader.id}:`, error);
+                    placeholder.innerHTML = `<div class="error-message">Error: ${error.message}</div>`;
                 }
-            } catch (error) {
-                console.error(`Error creating loader ${loader.id}:`, error);
-                placeholder.innerHTML = `<div class="error-message">Error: ${error.message}</div>`;
+            });
+
+            currentIndex = endIndex;
+
+            // Schedule next batch with a small delay to allow UI to breathe
+            if (currentIndex < filteredLoaders.length) {
+                setTimeout(loadNextBatch, 50);
             }
-        }, 100);
-    });
+        }
+
+        // Start loading the first batch after a short delay
+        setTimeout(loadNextBatch, 50);
+    };
+
+    // Execute the card creation process
+    createCards();
 }
 
 // Open loader modal
@@ -200,6 +255,18 @@ function openLoaderModal(loaderId) {
     } else if (loaderId === "pulse-basic") {
         loaderCategory = "pulse";
         loaderType = "basic";
+    } else if (loaderId === "pulse-whisper-float") {
+        loaderCategory = "pulse";
+        loaderType = "whisper-float";
+    } else if (loaderId === "pulse-particle-converge") {
+        loaderCategory = "pulse";
+        loaderType = "particle-converge";
+    } else if (loaderId === "dots-bounce") {
+        loaderCategory = "dots";
+        loaderType = "bounce";
+    } else if (loaderId === "spinner-triple") {
+        loaderCategory = "spinner";
+        loaderType = "triple";
     }
 
     try {
@@ -244,6 +311,18 @@ function updateCodeSnippets(category, type) {
     } else if (category === "pulse" && type === "basic") {
         loaderCategory = "pulse";
         loaderType = "basic";
+    } else if (category === "pulse" && type === "whisper-float") {
+        loaderCategory = "pulse";
+        loaderType = "whisper-float";
+    } else if (category === "pulse" && type === "particle-converge") {
+        loaderCategory = "pulse";
+        loaderType = "particle-converge";
+    } else if (category === "dots" && type === "bounce") {
+        loaderCategory = "dots";
+        loaderType = "bounce";
+    } else if (category === "spinner" && type === "triple") {
+        loaderCategory = "spinner";
+        loaderType = "triple";
     }
 
     // Get current config
@@ -309,6 +388,18 @@ function updateModalContent() {
         } else if (loaderId === "pulse-basic") {
             loaderCategory = "pulse";
             loaderType = "basic";
+        } else if (loaderId === "pulse-whisper-float") {
+            loaderCategory = "pulse";
+            loaderType = "whisper-float";
+        } else if (loaderId === "pulse-particle-converge") {
+            loaderCategory = "pulse";
+            loaderType = "particle-converge";
+        } else if (loaderId === "dots-bounce") {
+            loaderCategory = "dots";
+            loaderType = "bounce";
+        } else if (loaderId === "spinner-triple") {
+            loaderCategory = "spinner";
+            loaderType = "triple";
         }
 
         // Update loader preview
@@ -532,8 +623,12 @@ function initSearch() {
     searchButton.addEventListener("click", () => {
         searchContainer.classList.toggle("active");
         if (searchContainer.classList.contains("active")) {
+            // Animate search button rotation
+            searchButton.style.transform = "rotate(90deg)";
             setTimeout(() => searchInput.focus(), 300);
         } else {
+            // Reset search button rotation
+            searchButton.style.transform = "rotate(0)";
             searchInput.value = "";
             searchQuery = "";
             initLoaderCards();
@@ -546,6 +641,7 @@ function initSearch() {
             searchInput.value = "";
             searchQuery = "";
             searchContainer.classList.remove("active");
+            searchButton.style.transform = "rotate(0)";
             initLoaderCards();
         }
     });
@@ -554,6 +650,7 @@ function initSearch() {
     document.addEventListener("click", (e) => {
         if (!searchContainer.contains(e.target) && searchContainer.classList.contains("active")) {
             searchContainer.classList.remove("active");
+            searchButton.style.transform = "rotate(0)";
         }
     });
 }
@@ -595,10 +692,17 @@ function initControlPanel() {
     const controlPanel = document.getElementById("controlPanel");
     const closePanel = document.getElementById("closePanel");
     const panelHeader = document.querySelector(".control-panel-header");
+    const mainContent = document.querySelector(".main-content");
 
     if (!customizeBtn || !controlPanel || !closePanel) {
         console.error("Control panel elements not found");
         return;
+    }
+
+    // Function to close panel
+    function closeControlPanel() {
+        controlPanel.classList.remove("active");
+        customizeBtn.classList.remove("hidden");
     }
 
     // Add click event to open panel
@@ -608,9 +712,27 @@ function initControlPanel() {
     });
 
     // Add click event to close panel
-    closePanel.addEventListener("click", () => {
-        controlPanel.classList.remove("active");
-        customizeBtn.classList.remove("hidden");
+    closePanel.addEventListener("click", closeControlPanel);
+
+    // Close panel when clicking on main content
+    if (mainContent) {
+        mainContent.addEventListener("click", (e) => {
+            if (controlPanel.classList.contains("active")) {
+                closeControlPanel();
+            }
+        });
+    }
+
+    // Close panel when clicking anywhere outside the panel
+    document.addEventListener("click", (e) => {
+        if (
+            controlPanel.classList.contains("active") &&
+            !controlPanel.contains(e.target) &&
+            e.target !== customizeBtn &&
+            !customizeBtn.contains(e.target)
+        ) {
+            closeControlPanel();
+        }
     });
 
     // Make panel draggable
@@ -642,29 +764,58 @@ function initControlPanel() {
     }
 }
 
-// Initialize code tabs in modal
+// Initialize code expand buttons
 function initCodeTabs() {
-    const tabButtons = document.querySelectorAll(".tab-btn");
-    const codePanels = document.querySelectorAll(".code-panel");
+    const expandCssBtn = document.getElementById("expandCssBtn");
+    const expandJsBtn = document.getElementById("expandJsBtn");
+    const cssPanel = document.getElementById("cssPanel");
+    const jsPanel = document.getElementById("jsPanel");
 
-    tabButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-            // Update active tab
-            tabButtons.forEach((btn) => {
-                btn.classList.remove("active");
-            });
-            button.classList.add("active");
-
-            // Update active panel
-            const tabName = button.dataset.tab;
-            codePanels.forEach((panel) => {
-                panel.classList.remove("active");
-                if (panel.id === `${tabName}Panel`) {
-                    panel.classList.add("active");
-                }
-            });
+    if (expandCssBtn && cssPanel) {
+        expandCssBtn.addEventListener("click", () => {
+            cssPanel.classList.remove("collapsed");
+            cssPanel.classList.add("expanded");
+            expandCssBtn.textContent = "Hide code";
+            expandCssBtn.addEventListener(
+                "click",
+                () => {
+                    if (cssPanel.classList.contains("expanded")) {
+                        cssPanel.classList.remove("expanded");
+                        cssPanel.classList.add("collapsed");
+                        expandCssBtn.textContent = "Show all code";
+                    } else {
+                        cssPanel.classList.remove("collapsed");
+                        cssPanel.classList.add("expanded");
+                        expandCssBtn.textContent = "Hide code";
+                    }
+                },
+                { once: true }
+            );
         });
-    });
+    }
+
+    if (expandJsBtn && jsPanel) {
+        expandJsBtn.addEventListener("click", () => {
+            jsPanel.classList.remove("collapsed");
+            jsPanel.classList.add("expanded");
+            expandJsBtn.textContent = "Hide code";
+            expandJsBtn.addEventListener(
+                "click",
+                () => {
+                    if (jsPanel.classList.contains("expanded")) {
+                        jsPanel.classList.remove("expanded");
+                        jsPanel.classList.add("collapsed");
+                        expandJsBtn.textContent = "Show all code";
+                    } else {
+                        jsPanel.classList.remove("collapsed");
+                        jsPanel.classList.add("expanded");
+                        expandJsBtn.textContent = "Hide code";
+                    }
+                },
+                { once: true }
+            );
+        });
+    }
 }
 
 // Initialize copy buttons
@@ -729,21 +880,59 @@ function showToast(message) {
     }, 3000);
 }
 
-// Initialize modal close button
+// Initialize modal close button and dragging
 function initModalClose() {
     const closeModal = document.getElementById("closeModal");
+    const modal = document.getElementById("loaderModal");
+    const modalContent = modal ? modal.querySelector(".modal-content") : null;
+    const modalHeader = modal ? modal.querySelector(".modal-header") : null;
 
     if (closeModal) {
         closeModal.addEventListener("click", closeLoaderModal);
     }
 
     // Close modal when clicking outside
-    const modal = document.getElementById("loaderModal");
     if (modal) {
         modal.addEventListener("click", (e) => {
             if (e.target === modal) {
                 closeLoaderModal();
             }
+        });
+    }
+
+    // Make modal draggable by header
+    if (modalHeader && modalContent) {
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        modalHeader.addEventListener("mousedown", (e) => {
+            // Prevent dragging when clicking on close button
+            if (e.target.closest(".close-btn")) return;
+
+            isDragging = true;
+            offsetX = e.clientX - modalContent.getBoundingClientRect().left;
+            offsetY = e.clientY - modalContent.getBoundingClientRect().top;
+            modalContent.style.transition = "none";
+            modalContent.style.margin = "0";
+            modalContent.style.position = "absolute";
+        });
+
+        document.addEventListener("mousemove", (e) => {
+            if (isDragging) {
+                const x = e.clientX - offsetX;
+                const y = e.clientY - offsetY;
+
+                // Keep modal within viewport
+                const maxX = window.innerWidth - modalContent.offsetWidth;
+                const maxY = window.innerHeight - modalContent.offsetHeight;
+
+                modalContent.style.left = `${Math.max(0, Math.min(x, maxX))}px`;
+                modalContent.style.top = `${Math.max(0, Math.min(y, maxY))}px`;
+            }
+        });
+
+        document.addEventListener("mouseup", () => {
+            isDragging = false;
         });
     }
 }

@@ -4,6 +4,13 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>CXC Loader - Elegant CSS Loaders</title>
+        <!-- Base URL for GitHub Pages - will be ignored locally -->
+        <script>
+            // Check if we're on GitHub Pages
+            if (window.location.hostname.includes("github.io")) {
+                document.write('<base href="/cxc-loader/" />');
+            }
+        </script>
 
         <!-- Favicon -->
         <link rel="icon" href="images/cxc_logo.png" type="image/png" />
@@ -28,12 +35,20 @@
         <script src="js/loaders/spinner-triple.js"></script>
         <script src="js/loaders/pulse.js"></script>
         <script src="js/loaders/pulse-wave.js"></script>
-        <script src="js/loaders/dots.js"></script>
+
         <script src="js/loaders/dots-basic.js"></script>
         <script src="js/loaders/dots-bounce.js"></script>
         <script src="js/loaders/dots-fade.js"></script>
         <script src="js/loaders/progress-bar.js"></script>
         <script src="js/loaders/ripple-basic.js"></script>
+        <script src="js/loaders/ripple-soft.js"></script>
+        <script src="js/loaders/whisper-float.js"></script>
+        <script src="js/loaders/particle-converge.js"></script>
+        <script src="js/loaders/jelly-merge.js"></script>
+        <script src="js/loaders/particle-flow.js"></script>
+        <script src="js/loaders/ripple-portal.js"></script>
+        <script src="js/loaders/tail-blink.js"></script>
+        <script src="js/loaders/synaptic-pulse.js"></script>
 
         <!-- Main Scripts -->
         <script src="js/main.js" defer></script>
@@ -69,6 +84,10 @@
                 <button class="category-btn" data-category="dots">Dots</button>
                 <button class="category-btn" data-category="progress">Progress</button>
                 <button class="category-btn" data-category="ripple">Ripple</button>
+                <button class="category-btn" data-category="jelly">Jelly</button>
+                <button class="category-btn" data-category="particle">Particle</button>
+                <button class="category-btn" data-category="tail">Tail</button>
+                <button class="category-btn" data-category="synaptic">Synaptic</button>
             </nav>
 
             <main class="main-content">
@@ -121,22 +140,27 @@
                         <div class="loader-preview" id="loaderPreview">
                             <!-- Selected loader will be displayed here -->
                         </div>
-                        <div class="code-tabs">
-                            <button class="tab-btn active" data-tab="css">CSS</button>
-                            <button class="tab-btn" data-tab="js">JavaScript</button>
-                        </div>
                         <div class="code-panels">
-                            <div class="code-panel active" id="cssPanel">
-                                <div class="code-header">
-                                    <button id="copyCssBtn" class="copy-btn"><i class="fas fa-copy"></i> Copy</button>
+                            <div class="code-section">
+                                <h3 class="code-section-title">CSS</h3>
+                                <div class="code-panel collapsed" id="cssPanel">
+                                    <div class="code-header">
+                                        <button id="copyCssBtn" class="copy-btn"><i class="fas fa-copy"></i> Copy</button>
+                                    </div>
+                                    <pre><code id="cssCode" class="language-css">/* CSS code will appear here */</code></pre>
+                                    <button class="code-expand-btn" id="expandCssBtn">Show all code</button>
                                 </div>
-                                <pre><code id="cssCode" class="language-css">/* CSS code will appear here */</code></pre>
                             </div>
-                            <div class="code-panel" id="jsPanel">
-                                <div class="code-header">
-                                    <button id="copyJsBtn" class="copy-btn"><i class="fas fa-copy"></i> Copy</button>
+
+                            <div class="code-section">
+                                <h3 class="code-section-title">JavaScript</h3>
+                                <div class="code-panel collapsed" id="jsPanel">
+                                    <div class="code-header">
+                                        <button id="copyJsBtn" class="copy-btn"><i class="fas fa-copy"></i> Copy</button>
+                                    </div>
+                                    <pre><code id="jsCode" class="language-javascript">// JavaScript code will appear here</code></pre>
+                                    <button class="code-expand-btn" id="expandJsBtn">Show all code</button>
                                 </div>
-                                <pre><code id="jsCode" class="language-javascript">// JavaScript code will appear here</code></pre>
                             </div>
                         </div>
                     </div>

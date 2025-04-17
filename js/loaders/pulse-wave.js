@@ -25,8 +25,8 @@
 
         const container = document.createElement("div");
         container.className = "cxc-pulse-wave";
-        container.style.width = "40px";
-        container.style.height = "40px";
+        container.style.width = "72px";
+        container.style.height = "72px";
         container.style.position = "relative";
 
         // Create the center dot
@@ -35,10 +35,10 @@
         centerDot.style.position = "absolute";
         centerDot.style.top = "50%";
         centerDot.style.left = "50%";
-        centerDot.style.width = "10px";
-        centerDot.style.height = "10px";
-        centerDot.style.marginTop = "-5px";
-        centerDot.style.marginLeft = "-5px";
+        centerDot.style.width = "12px";
+        centerDot.style.height = "12px";
+        centerDot.style.marginTop = "-6px";
+        centerDot.style.marginLeft = "-6px";
         centerDot.style.backgroundColor = color;
         centerDot.style.borderRadius = "50%";
 
@@ -49,10 +49,10 @@
             wave.style.position = "absolute";
             wave.style.top = "50%";
             wave.style.left = "50%";
-            wave.style.width = "40px";
-            wave.style.height = "40px";
-            wave.style.marginTop = "-20px";
-            wave.style.marginLeft = "-20px";
+            wave.style.width = "72px";
+            wave.style.height = "72px";
+            wave.style.marginTop = "-36px";
+            wave.style.marginLeft = "-36px";
             wave.style.border = `2px solid ${color}`;
             wave.style.borderRadius = "50%";
             wave.style.opacity = "0";
@@ -105,8 +105,8 @@
         const animationDuration = (1.8 / config.speed).toFixed(2);
 
         return `.cxc-pulse-wave {
-  width: 40px;
-  height: 40px;
+  width: 72px;
+  height: 72px;
   position: relative;
 }
 
@@ -114,10 +114,10 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 10px;
-  height: 10px;
-  margin-top: -5px;
-  margin-left: -5px;
+  width: 12px;
+  height: 12px;
+  margin-top: -6px;
+  margin-left: -6px;
   background-color: ${color};
   border-radius: 50%;
 }
@@ -126,10 +126,10 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 40px;
-  height: 40px;
-  margin-top: -20px;
-  margin-left: -20px;
+  width: 72px;
+  height: 72px;
+  margin-top: -36px;
+  margin-left: -36px;
   border: 2px solid ${color};
   border-radius: 50%;
   opacity: 0;
@@ -167,8 +167,8 @@
 
         return `// Create a pulse wave animation
 const container = document.createElement('div');
-container.style.width = '40px';
-container.style.height = '40px';
+container.style.width = '72px';
+container.style.height = '72px';
 container.style.position = 'relative';
 
 // Create the center dot
@@ -176,10 +176,10 @@ const centerDot = document.createElement('div');
 centerDot.style.position = 'absolute';
 centerDot.style.top = '50%';
 centerDot.style.left = '50%';
-centerDot.style.width = '10px';
-centerDot.style.height = '10px';
-centerDot.style.marginTop = '-5px';
-centerDot.style.marginLeft = '-5px';
+centerDot.style.width = '12px';
+centerDot.style.height = '12px';
+centerDot.style.marginTop = '-6px';
+centerDot.style.marginLeft = '-6px';
 centerDot.style.backgroundColor = '${color}';
 centerDot.style.borderRadius = '50%';
 
@@ -189,10 +189,10 @@ for (let i = 0; i < 3; i++) {
   wave.style.position = 'absolute';
   wave.style.top = '50%';
   wave.style.left = '50%';
-  wave.style.width = '40px';
-  wave.style.height = '40px';
-  wave.style.marginTop = '-20px';
-  wave.style.marginLeft = '-20px';
+  wave.style.width = '72px';
+  wave.style.height = '72px';
+  wave.style.marginTop = '-36px';
+  wave.style.marginLeft = '-36px';
   wave.style.border = '2px solid ${color}';
   wave.style.borderRadius = '50%';
   wave.style.opacity = '0';

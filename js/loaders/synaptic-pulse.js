@@ -1,23 +1,23 @@
 /**
- * CXC-Loader - Bouncing Dots
- * A bouncing dots loader
+ * CXC-Loader - Synaptic Pulse
+ * A series of pulsing dots that mimic synaptic activity
  */
 
 (function () {
     // Category and name for this loader
-    const CATEGORY = "dots";
-    const NAME = "bounce";
+    const CATEGORY = "synaptic";
+    const NAME = "pulse";
 
     // Create the loader element
     function createLoader(config) {
         // Create container
         const container = document.createElement("div");
-        container.className = "cxc-dots-bounce";
+        container.className = "cxc-synaptic-pulse";
 
         // Create dots
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 5; i++) {
             const dot = document.createElement("div");
-            dot.className = "cxc-bounce-dot";
+            dot.className = "cxc-synaptic-pulse-dot";
             container.appendChild(dot);
         }
 
@@ -30,46 +30,38 @@
     // Apply styles based on configuration
     function applyStyles(element, config) {
         const color = CXCLoader.getColor(config.color, config.shade);
-        const size = config.size || "12px";
+        const dotSize = config.dotSize || "6px";
         const gap = config.gap || "6px";
         const speed = config.speed || 1.0;
-        const duration = (0.5 / speed).toFixed(2) + "s";
+        const duration = (1.2 / speed).toFixed(2) + "s";
 
         // Apply styles to container
         element.style.display = "flex";
-        element.style.alignItems = "center";
-        element.style.justifyContent = "center";
         element.style.gap = gap;
 
+        // Get dots
+        const dots = element.querySelectorAll(".cxc-synaptic-pulse-dot");
+
         // Apply styles to dots
-        const dots = element.querySelectorAll(".cxc-bounce-dot");
         dots.forEach((dot, index) => {
-            dot.style.width = size;
-            dot.style.height = size;
+            dot.style.width = dotSize;
+            dot.style.height = dotSize;
             dot.style.backgroundColor = color;
             dot.style.borderRadius = "50%";
-            dot.style.animation = `cxc-bounce-animation ${duration} infinite alternate`;
-
+            dot.style.animation = `cxc-synaptic-pulse-animation ${duration} infinite ease-in-out`;
+            
             // Set different delays for each dot
-            if (index === 0) {
-                dot.style.animationDelay = "-0.32s";
-            } else if (index === 1) {
-                dot.style.animationDelay = "-0.16s";
-            }
+            dot.style.animationDelay = `${index * 0.2}s`;
         });
 
         // Add keyframes if they don't exist
-        if (!document.getElementById("cxc-bounce-keyframes")) {
+        if (!document.getElementById("cxc-synaptic-pulse-keyframes")) {
             const style = document.createElement("style");
-            style.id = "cxc-bounce-keyframes";
+            style.id = "cxc-synaptic-pulse-keyframes";
             style.textContent = `
-                @keyframes cxc-bounce-animation {
-                    0% {
-                        transform: translateY(0);
-                    }
-                    100% {
-                        transform: translateY(-15px);
-                    }
+                @keyframes cxc-synaptic-pulse-animation {
+                    0%, 100% { opacity: 0.2; transform: scale(1); }
+                    50% { opacity: 1; transform: scale(1.6); }
                 }
             `;
             document.head.appendChild(style);
@@ -79,56 +71,48 @@
     // Generate CSS for this loader
     function generateCSS(config) {
         const color = CXCLoader.getColor(config.color, config.shade);
-        const size = config.size || "12px";
+        const dotSize = config.dotSize || "6px";
         const gap = config.gap || "6px";
         const speed = config.speed || 1.0;
-        const duration = (0.5 / speed).toFixed(2) + "s";
+        const duration = (1.2 / speed).toFixed(2);
 
         return `
-/* Bouncing Dots Loader */
-.cxc-dots-bounce {
+/* Synaptic Pulse Loader */
+.cxc-synaptic-pulse {
     display: flex;
-    align-items: center;
-    justify-content: center;
     gap: ${gap};
 }
 
-.cxc-bounce-dot {
-    width: ${size};
-    height: ${size};
+.cxc-synaptic-pulse-dot {
+    width: ${dotSize};
+    height: ${dotSize};
     background-color: ${color};
     border-radius: 50%;
-    animation: cxc-bounce-animation ${duration} infinite alternate;
+    animation: cxc-synaptic-pulse-animation ${duration}s infinite ease-in-out;
 }
 
-.cxc-bounce-dot:nth-child(1) {
-    animation-delay: -0.32s;
-}
+.cxc-synaptic-pulse-dot:nth-child(1) { animation-delay: 0s; }
+.cxc-synaptic-pulse-dot:nth-child(2) { animation-delay: 0.2s; }
+.cxc-synaptic-pulse-dot:nth-child(3) { animation-delay: 0.4s; }
+.cxc-synaptic-pulse-dot:nth-child(4) { animation-delay: 0.6s; }
+.cxc-synaptic-pulse-dot:nth-child(5) { animation-delay: 0.8s; }
 
-.cxc-bounce-dot:nth-child(2) {
-    animation-delay: -0.16s;
-}
-
-@keyframes cxc-bounce-animation {
-    0% {
-        transform: translateY(0);
-    }
-    100% {
-        transform: translateY(-15px);
-    }
+@keyframes cxc-synaptic-pulse-animation {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.6); }
 }`;
     }
 
     // Generate JS for this loader
     function generateJS(config) {
         return `
-// Create a bouncing dots loader
-function createBouncingDots(config = {}) {
+// Create a synaptic pulse loader
+function createSynapticPulse(config = {}) {
     // Default configuration
     const defaultConfig = {
         color: '${config.color}',
         shade: ${config.shade},
-        size: '12px',
+        dotSize: '6px',
         gap: '6px',
         speed: ${config.speed}
     };
@@ -138,47 +122,35 @@ function createBouncingDots(config = {}) {
 
     // Create container
     const container = document.createElement('div');
-    container.className = 'cxc-dots-bounce';
+    container.className = 'cxc-synaptic-pulse';
     container.style.display = 'flex';
-    container.style.alignItems = 'center';
-    container.style.justifyContent = 'center';
     container.style.gap = mergedConfig.gap;
 
-    // Get animation duration based on speed
-    const duration = (0.5 / mergedConfig.speed).toFixed(2) + 's';
+    // Calculate animation duration based on speed
+    const duration = (1.2 / mergedConfig.speed).toFixed(2);
 
     // Create dots
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 5; i++) {
         const dot = document.createElement('div');
-        dot.className = 'cxc-bounce-dot';
-        dot.style.width = mergedConfig.size;
-        dot.style.height = mergedConfig.size;
+        dot.className = 'cxc-synaptic-pulse-dot';
+        dot.style.width = mergedConfig.dotSize;
+        dot.style.height = mergedConfig.dotSize;
         dot.style.backgroundColor = mergedConfig.color;
         dot.style.borderRadius = '50%';
-        dot.style.animation = \`cxc-bounce-animation \${duration} infinite alternate\`;
-
-        // Set different delays for each dot
-        if (i === 0) {
-            dot.style.animationDelay = '-0.32s';
-        } else if (i === 1) {
-            dot.style.animationDelay = '-0.16s';
-        }
-
+        dot.style.animation = \`cxc-synaptic-pulse-animation \${duration}s infinite ease-in-out\`;
+        dot.style.animationDelay = \`\${i * 0.2}s\`;
+        
         container.appendChild(dot);
     }
 
     // Add keyframes if they don't exist
-    if (!document.getElementById('cxc-bounce-keyframes')) {
+    if (!document.getElementById('cxc-synaptic-pulse-keyframes')) {
         const style = document.createElement('style');
-        style.id = 'cxc-bounce-keyframes';
+        style.id = 'cxc-synaptic-pulse-keyframes';
         style.textContent = \`
-            @keyframes cxc-bounce-animation {
-                0% {
-                    transform: translateY(0);
-                }
-                100% {
-                    transform: translateY(-15px);
-                }
+            @keyframes cxc-synaptic-pulse-animation {
+                0%, 100% { opacity: 0.2; transform: scale(1); }
+                50% { opacity: 1; transform: scale(1.6); }
             }
         \`;
         document.head.appendChild(style);
