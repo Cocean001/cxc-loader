@@ -5,10 +5,10 @@
 
 const loaderData = [
     {
-        id: "wave-liquid",
+        id: "wave-ai-pulse",
         category: "wave",
-        name: "Liquid Wave",
-        tag: "W-004",
+        name: "AI Pulse Wave",
+        tag: "W-002",
         createdAt: "2024-07-08",
         totalIndex: 1,
     },
@@ -20,14 +20,7 @@ const loaderData = [
         createdAt: "2024-07-07",
         totalIndex: 2,
     },
-    {
-        id: "wave-ripple",
-        category: "wave",
-        name: "Ripple Wave",
-        tag: "W-002",
-        createdAt: "2024-07-06",
-        totalIndex: 3,
-    },
+
     {
         id: "spinner-bubble-pulse",
         category: "pulse",
