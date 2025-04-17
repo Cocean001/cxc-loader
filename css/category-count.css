@@ -5,21 +5,22 @@
 
 .category-btn {
     position: relative;
-    padding-right: 30px !important; /* Make room for the count badge */
+    padding-right: 36px !important; /* Make room for the count badge */
 }
 
 .category-count {
     position: absolute;
-    right: 8px;
+    right: 10px;
     top: 50%;
     transform: translateY(-50%);
     background-color: rgba(0, 0, 0, 0.1);
     color: inherit;
     font-size: 0.7rem;
     font-weight: 600;
-    padding: 1px 5px;
+    padding: 1px 6px;
     border-radius: 10px;
-    min-width: 16px;
+    min-width: 18px;
+    height: 18px;
     text-align: center;
     transition: background-color 0.2s ease, color 0.2s ease;
     display: inline-flex;

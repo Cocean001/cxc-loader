@@ -5,6 +5,30 @@
 
 const loaderData = [
     {
+        id: "spinner-fluid-orbit",
+        category: "spinner",
+        name: "Fluid Orbit",
+        tag: "S-007",
+        createdAt: "2024-07-05",
+        totalIndex: 1,
+    },
+    {
+        id: "spinner-bubble-pulse",
+        category: "spinner",
+        name: "Bubble Pulse",
+        tag: "S-006",
+        createdAt: "2024-07-04",
+        totalIndex: 2,
+    },
+    {
+        id: "spinner-siri-wave",
+        category: "spinner",
+        name: "Siri Wave",
+        tag: "S-005",
+        createdAt: "2024-07-03",
+        totalIndex: 3,
+    },
+    {
         id: "spinner-circular",
         category: "spinner",
         name: "Circular Spinner",

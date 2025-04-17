@@ -90,7 +90,7 @@ function initLoaderCards() {
         return;
     }
 
-    // Create cards for each loader
+    // Create cards for each loader with lazy loading
     const createCards = () => {
         // Create all card elements first without loaders
         filteredLoaders.forEach((loader) => {
@@ -126,96 +126,142 @@ function initLoaderCards() {
             loadersGrid.appendChild(card);
         });
 
-        // Then load loaders in batches to prevent UI freezing
-        const batchSize = 4; // Process 4 loaders at a time
-        let currentIndex = 0;
-
-        function loadNextBatch() {
-            if (currentIndex >= filteredLoaders.length) return;
-
-            const endIndex = Math.min(currentIndex + batchSize, filteredLoaders.length);
-            const batch = filteredLoaders.slice(currentIndex, endIndex);
-
-            batch.forEach((loader) => {
-                const card = document.querySelector(`.loader-card[data-loader-id="${loader.id}"]`);
-                if (!card) return;
-
-                const placeholder = card.querySelector(".loader-placeholder");
-                if (!placeholder) return;
-
-                try {
-                    const [category, type] = loader.id.split("-");
-
-                    // Map loader IDs to correct category/type
-                    let loaderCategory = category;
-                    let loaderType = type;
-
-                    // Special cases for loader IDs
-                    if (loader.id === "dots-default") {
-                        loaderCategory = "dots";
-                        loaderType = "default";
-                    } else if (loader.id === "pulse-basic") {
-                        loaderCategory = "pulse";
-                        loaderType = "basic";
-                    } else if (loader.id === "spinner-basic") {
-                        // spinner-basic could be either in spinner.js or spinner-basic.js
-                        if (!CXCLoader.loaderExists("spinner", "basic")) {
-                            console.log("Trying alternative registration for spinner-basic");
-                            // Try to register it manually
-                            if (typeof createBasicSpinner === "function") {
-                                CXCLoader.registerLoader("spinner", "basic", createBasicSpinner);
-                            }
-                        }
-                    } else if (loader.id === "pulse-whisper-float") {
-                        loaderCategory = "pulse";
-                        loaderType = "whisper-float";
-                        // Force registration if needed
-                        if (!CXCLoader.loaderExists(loaderCategory, loaderType)) {
-                            console.log(`Forcing registration for ${loaderCategory}-${loaderType}`);
-                            window.CXCLoader.registerLoader(loaderCategory, loaderType, window.createWhisperFloat);
-                        }
-                    } else if (loader.id === "pulse-particle-converge") {
-                        loaderCategory = "pulse";
-                        loaderType = "particle-converge";
-                        // Force registration if needed
-                        if (!CXCLoader.loaderExists(loaderCategory, loaderType)) {
-                            console.log(`Forcing registration for ${loaderCategory}-${loaderType}`);
-                            window.CXCLoader.registerLoader(loaderCategory, loaderType, window.createParticleConverge);
-                        }
-                    } else if (loader.id === "dots-bounce") {
-                        loaderCategory = "dots";
-                        loaderType = "bounce";
-                    } else if (loader.id === "spinner-triple") {
-                        loaderCategory = "spinner";
-                        loaderType = "triple";
-                    }
-
-                    if (CXCLoader.loaderExists(loaderCategory, loaderType)) {
-                        const loaderElement = CXCLoader.createLoader(loaderCategory, loaderType);
-                        placeholder.innerHTML = "";
-                        placeholder.appendChild(loaderElement);
-                        card.classList.add("loader-loaded");
-                    } else {
-                        console.warn(`Loader ${loader.id} (${loaderCategory}-${loaderType}) not found in registry`);
-                        placeholder.innerHTML = `<div class="error-message">Loader not available</div>`;
-                    }
-                } catch (error) {
-                    console.error(`Error creating loader ${loader.id}:`, error);
-                    placeholder.innerHTML = `<div class="error-message">Error: ${error.message}</div>`;
-                }
-            });
-
-            currentIndex = endIndex;
-
-            // Schedule next batch with a small delay to allow UI to breathe
-            if (currentIndex < filteredLoaders.length) {
-                setTimeout(loadNextBatch, 50);
-            }
-        }
-
-        // Start loading the first batch after a short delay
-        setTimeout(loadNextBatch, 50);
+        // Set up intersection observer for lazy loading
+        setupLazyLoading();
     };
+
+    // Set up lazy loading with Intersection Observer
+    function setupLazyLoading() {
+        // Options for the observer
+        const options = {
+            root: null, // viewport is the root
+            rootMargin: "100px", // load when within 100px of viewport
+            threshold: 0.1, // trigger when 10% of the element is visible
+        };
+
+        // Create a map to track which cards have been loaded
+        const loadedCards = new Map();
+
+        // Create the observer
+        const observer = new IntersectionObserver((entries, observer) => {
+            // Process visible cards in batches
+            const visibleCards = entries
+                .filter((entry) => entry.isIntersecting)
+                .map((entry) => entry.target)
+                .filter((card) => !loadedCards.get(card.dataset.loaderId));
+
+            if (visibleCards.length === 0) return;
+
+            // Process cards in small batches to prevent UI freezing
+            const batchSize = 4;
+            for (let i = 0; i < visibleCards.length; i += batchSize) {
+                const batch = visibleCards.slice(i, i + batchSize);
+
+                // Use setTimeout to stagger the loading
+                setTimeout(() => {
+                    batch.forEach((card) => {
+                        loadCard(card);
+                        // Mark this card as loaded
+                        loadedCards.set(card.dataset.loaderId, true);
+                        // Stop observing this card
+                        observer.unobserve(card);
+                    });
+                }, i * 50); // Stagger the loading of each batch
+            }
+        }, options);
+
+        // Start observing all cards
+        document.querySelectorAll(".loader-card").forEach((card) => {
+            observer.observe(card);
+        });
+
+        // Load the first row immediately (typically 4 cards per row)
+        const firstRowCards = Array.from(document.querySelectorAll(".loader-card")).slice(0, 4);
+        firstRowCards.forEach((card) => {
+            loadCard(card);
+            loadedCards.set(card.dataset.loaderId, true);
+            observer.unobserve(card);
+        });
+    }
+
+    // Function to load a single card
+    function loadCard(card) {
+        const loaderId = card.dataset.loaderId;
+        if (!loaderId) return;
+
+        const placeholder = card.querySelector(".loader-placeholder");
+        if (!placeholder) return;
+
+        try {
+            const [category, type] = loaderId.split("-");
+
+            // Map loader IDs to correct category/type
+            let loaderCategory = category;
+            let loaderType = type;
+
+            // Special cases for loader IDs
+            if (loaderId === "dots-default") {
+                loaderCategory = "dots";
+                loaderType = "default";
+            } else if (loaderId === "pulse-basic") {
+                loaderCategory = "pulse";
+                loaderType = "basic";
+            } else if (loaderId === "spinner-basic") {
+                // spinner-basic could be either in spinner.js or spinner-basic.js
+                if (!CXCLoader.loaderExists("spinner", "basic")) {
+                    console.log("Trying alternative registration for spinner-basic");
+                    // Try to register it manually
+                    if (typeof createBasicSpinner === "function") {
+                        CXCLoader.registerLoader("spinner", "basic", createBasicSpinner);
+                    }
+                }
+            } else if (loaderId === "pulse-whisper-float") {
+                loaderCategory = "pulse";
+                loaderType = "whisper-float";
+                // Force registration if needed
+                if (!CXCLoader.loaderExists(loaderCategory, loaderType)) {
+                    console.log(`Forcing registration for ${loaderCategory}-${loaderType}`);
+                    window.CXCLoader.registerLoader(loaderCategory, loaderType, window.createWhisperFloat);
+                }
+            } else if (loaderId === "pulse-particle-converge") {
+                loaderCategory = "pulse";
+                loaderType = "particle-converge";
+                // Force registration if needed
+                if (!CXCLoader.loaderExists(loaderCategory, loaderType)) {
+                    console.log(`Forcing registration for ${loaderCategory}-${loaderType}`);
+                    window.CXCLoader.registerLoader(loaderCategory, loaderType, window.createParticleConverge);
+                }
+            } else if (loaderId === "dots-bounce") {
+                loaderCategory = "dots";
+                loaderType = "bounce";
+            } else if (loaderId === "spinner-triple") {
+                loaderCategory = "spinner";
+                loaderType = "triple";
+            } else if (loaderId === "spinner-siri-wave") {
+                loaderCategory = "spinner";
+                loaderType = "siri-wave";
+            } else if (loaderId === "spinner-bubble-pulse") {
+                loaderCategory = "spinner";
+                loaderType = "bubble-pulse";
+            } else if (loaderId === "spinner-fluid-orbit") {
+                loaderCategory = "spinner";
+                loaderType = "fluid-orbit";
+            }
+
+            if (CXCLoader.loaderExists(loaderCategory, loaderType)) {
+                const loaderElement = CXCLoader.createLoader(loaderCategory, loaderType);
+                placeholder.innerHTML = "";
+                placeholder.appendChild(loaderElement);
+                card.classList.add("loader-loaded");
+            } else {
+                console.warn(`Loader ${loaderId} (${loaderCategory}-${loaderType}) not found in registry`);
+                placeholder.innerHTML = `<div class="error-message">Loader not available</div>`;
+            }
+        } catch (error) {
+            console.error(`Error creating loader ${loaderId}:`, error);
+            placeholder.innerHTML = `<div class="error-message">Error: ${error.message}</div>`;
+        }
+    }
 
     // Execute the card creation process
     createCards();
@@ -286,6 +332,15 @@ function openLoaderModal(loaderId) {
     } else if (loaderId === "spinner-triple") {
         loaderCategory = "spinner";
         loaderType = "triple";
+    } else if (loaderId === "spinner-siri-wave") {
+        loaderCategory = "spinner";
+        loaderType = "siri-wave";
+    } else if (loaderId === "spinner-bubble-pulse") {
+        loaderCategory = "spinner";
+        loaderType = "bubble-pulse";
+    } else if (loaderId === "spinner-fluid-orbit") {
+        loaderCategory = "spinner";
+        loaderType = "fluid-orbit";
     }
 
     try {
@@ -384,6 +439,15 @@ function updateCodeSnippets(category, type) {
     } else if (category === "spinner" && type === "triple") {
         loaderCategory = "spinner";
         loaderType = "triple";
+    } else if (category === "spinner" && type === "siri-wave") {
+        loaderCategory = "spinner";
+        loaderType = "siri-wave";
+    } else if (category === "spinner" && type === "bubble-pulse") {
+        loaderCategory = "spinner";
+        loaderType = "bubble-pulse";
+    } else if (category === "spinner" && type === "fluid-orbit") {
+        loaderCategory = "spinner";
+        loaderType = "fluid-orbit";
     }
 
     // Get current config
@@ -491,6 +555,15 @@ function updateModalContent() {
         } else if (loaderId === "spinner-triple") {
             loaderCategory = "spinner";
             loaderType = "triple";
+        } else if (loaderId === "spinner-siri-wave") {
+            loaderCategory = "spinner";
+            loaderType = "siri-wave";
+        } else if (loaderId === "spinner-bubble-pulse") {
+            loaderCategory = "spinner";
+            loaderType = "bubble-pulse";
+        } else if (loaderId === "spinner-fluid-orbit") {
+            loaderCategory = "spinner";
+            loaderType = "fluid-orbit";
         }
 
         // Update loader preview
