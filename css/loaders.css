@@ -394,6 +394,10 @@
     position: relative;
 }
 
+.code-panel.expanded pre {
+    max-height: none;
+}
+
 .code-panel.collapsed pre {
     mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
     -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);

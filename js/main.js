@@ -773,47 +773,29 @@ function initCodeTabs() {
 
     if (expandCssBtn && cssPanel) {
         expandCssBtn.addEventListener("click", () => {
-            cssPanel.classList.remove("collapsed");
-            cssPanel.classList.add("expanded");
-            expandCssBtn.textContent = "Hide code";
-            expandCssBtn.addEventListener(
-                "click",
-                () => {
-                    if (cssPanel.classList.contains("expanded")) {
-                        cssPanel.classList.remove("expanded");
-                        cssPanel.classList.add("collapsed");
-                        expandCssBtn.textContent = "Show all code";
-                    } else {
-                        cssPanel.classList.remove("collapsed");
-                        cssPanel.classList.add("expanded");
-                        expandCssBtn.textContent = "Hide code";
-                    }
-                },
-                { once: true }
-            );
+            if (cssPanel.classList.contains("expanded")) {
+                cssPanel.classList.remove("expanded");
+                cssPanel.classList.add("collapsed");
+                expandCssBtn.textContent = "Show all code";
+            } else {
+                cssPanel.classList.remove("collapsed");
+                cssPanel.classList.add("expanded");
+                expandCssBtn.textContent = "Hide code";
+            }
         });
     }
 
     if (expandJsBtn && jsPanel) {
         expandJsBtn.addEventListener("click", () => {
-            jsPanel.classList.remove("collapsed");
-            jsPanel.classList.add("expanded");
-            expandJsBtn.textContent = "Hide code";
-            expandJsBtn.addEventListener(
-                "click",
-                () => {
-                    if (jsPanel.classList.contains("expanded")) {
-                        jsPanel.classList.remove("expanded");
-                        jsPanel.classList.add("collapsed");
-                        expandJsBtn.textContent = "Show all code";
-                    } else {
-                        jsPanel.classList.remove("collapsed");
-                        jsPanel.classList.add("expanded");
-                        expandJsBtn.textContent = "Hide code";
-                    }
-                },
-                { once: true }
-            );
+            if (jsPanel.classList.contains("expanded")) {
+                jsPanel.classList.remove("expanded");
+                jsPanel.classList.add("collapsed");
+                expandJsBtn.textContent = "Show all code";
+            } else {
+                jsPanel.classList.remove("collapsed");
+                jsPanel.classList.add("expanded");
+                expandJsBtn.textContent = "Hide code";
+            }
         });
     }
 }
