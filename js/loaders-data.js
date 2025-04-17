@@ -5,6 +5,30 @@
 
 const loaderData = [
     {
+        id: "wave-liquid",
+        category: "wave",
+        name: "Liquid Wave",
+        tag: "W-004",
+        createdAt: "2024-07-08",
+        totalIndex: 1,
+    },
+    {
+        id: "wave-oscillate",
+        category: "wave",
+        name: "Oscillate Wave",
+        tag: "W-003",
+        createdAt: "2024-07-07",
+        totalIndex: 2,
+    },
+    {
+        id: "wave-ripple",
+        category: "wave",
+        name: "Ripple Wave",
+        tag: "W-002",
+        createdAt: "2024-07-06",
+        totalIndex: 3,
+    },
+    {
         id: "spinner-bubble-pulse",
         category: "pulse",
         name: "Bubble Pulse",
@@ -174,9 +198,9 @@ const loaderData = [
     },
     {
         id: "particle-flow",
-        category: "particle",
+        category: "dots",
         name: "Particle Flow",
-        tag: "PA-001",
+        tag: "D-006",
         createdAt: "2023-06-05",
         totalIndex: 20,
     },
