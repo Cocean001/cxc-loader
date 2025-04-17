@@ -245,6 +245,9 @@ function openLoaderModal(loaderId) {
         return;
     }
 
+    // Set current loader ID in modal dataset
+    modal.dataset.currentLoader = loaderId;
+
     // Update modal title
     modalTitle.textContent = loader.name;
 
@@ -303,7 +306,39 @@ function openLoaderModal(loaderId) {
     }
 
     // Update code snippets
-    updateCodeSnippets(category, type);
+    if (loaderId === "pulse-particle-converge") {
+        // Special case for P004
+        const config = CXCLoader.getGlobalConfig();
+        const cssCode = document.getElementById("cssCode");
+        const jsCode = document.getElementById("jsCode");
+
+        if (cssCode) {
+            cssCode.textContent = generateParticleConvergeCSS(config);
+            Prism.highlightElement(cssCode);
+        }
+
+        if (jsCode) {
+            jsCode.textContent = generateParticleConvergeJS(config);
+            Prism.highlightElement(jsCode);
+        }
+    } else if (loaderId === "pulse-whisper-float") {
+        // Special case for P003
+        const config = CXCLoader.getGlobalConfig();
+        const cssCode = document.getElementById("cssCode");
+        const jsCode = document.getElementById("jsCode");
+
+        if (cssCode) {
+            cssCode.textContent = generateWhisperFloatCSS(config);
+            Prism.highlightElement(cssCode);
+        }
+
+        if (jsCode) {
+            jsCode.textContent = generateWhisperFloatJS(config);
+            Prism.highlightElement(jsCode);
+        }
+    } else {
+        updateCodeSnippets(category, type);
+    }
 
     // Show modal
     modal.classList.add("active");
@@ -479,7 +514,39 @@ function updateModalContent() {
         }
 
         // Update code snippets
-        updateCodeSnippets(category, type);
+        if (loaderId === "pulse-particle-converge") {
+            // Special case for P004
+            const config = CXCLoader.getGlobalConfig();
+            const cssCode = document.getElementById("cssCode");
+            const jsCode = document.getElementById("jsCode");
+
+            if (cssCode) {
+                cssCode.textContent = generateParticleConvergeCSS(config);
+                Prism.highlightElement(cssCode);
+            }
+
+            if (jsCode) {
+                jsCode.textContent = generateParticleConvergeJS(config);
+                Prism.highlightElement(jsCode);
+            }
+        } else if (loaderId === "pulse-whisper-float") {
+            // Special case for P003
+            const config = CXCLoader.getGlobalConfig();
+            const cssCode = document.getElementById("cssCode");
+            const jsCode = document.getElementById("jsCode");
+
+            if (cssCode) {
+                cssCode.textContent = generateWhisperFloatCSS(config);
+                Prism.highlightElement(cssCode);
+            }
+
+            if (jsCode) {
+                jsCode.textContent = generateWhisperFloatJS(config);
+                Prism.highlightElement(jsCode);
+            }
+        } else {
+            updateCodeSnippets(loaderCategory, loaderType);
+        }
     }
 }
 
@@ -872,6 +939,83 @@ function generateWhisperFloatCSS(config) {
 
 // Helper function to generate WhisperFloat JS
 function generateWhisperFloatJS(config) {
+    // Make sure createWhisperFloat is defined globally
+    if (!window.createWhisperFloat) {
+        window.createWhisperFloat = function (config = {}) {
+            // Default configuration
+            const defaultConfig = {
+                color: config.color || "blue",
+                shade: config.shade || 500,
+                size: "80px",
+                speed: config.speed || 1.0,
+            };
+
+            // Merge configurations
+            const mergedConfig = { ...defaultConfig, ...config };
+
+            // Create container
+            const container = document.createElement("div");
+            container.className = "cxc-whisper-float";
+            container.style.position = "relative";
+            container.style.width = mergedConfig.size;
+            container.style.height = mergedConfig.size;
+
+            // Get animation duration based on speed
+            const duration = (3 / mergedConfig.speed).toFixed(2) + "s";
+
+            // Create floating particles
+            const positions = [
+                { top: "70%", left: "30%", delay: "0s" },
+                { top: "80%", left: "50%", delay: "0.6s" },
+                { top: "75%", left: "70%", delay: "1.2s" },
+                { top: "85%", left: "40%", delay: "1.8s" },
+                { top: "78%", left: "60%", delay: "2.4s" },
+            ];
+
+            for (let i = 0; i < 5; i++) {
+                const float = document.createElement("div");
+                float.className = "cxc-float";
+                float.style.position = "absolute";
+                float.style.width = "6px";
+                float.style.height = "6px";
+                float.style.backgroundColor = CXCLoader.getColor(mergedConfig.color, mergedConfig.shade);
+                float.style.borderRadius = "50%";
+                float.style.opacity = "0";
+                float.style.animation = `cxc-float-up ${duration} ease-in-out infinite`;
+
+                // Set position and delay
+                float.style.top = positions[i].top;
+                float.style.left = positions[i].left;
+                float.style.animationDelay = positions[i].delay;
+
+                container.appendChild(float);
+            }
+
+            // Add keyframes if they don't exist
+            if (!document.getElementById("cxc-float-keyframes")) {
+                const style = document.createElement("style");
+                style.id = "cxc-float-keyframes";
+                style.textContent = `
+                    @keyframes cxc-float-up {
+                        0% {
+                            transform: translateY(0) scale(0.8);
+                            opacity: 0;
+                        }
+                        40% {
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: translateY(-60px) scale(1);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            return container;
+        };
+    }
     return `
 // Create a whisper float loader
 function createWhisperFloat(config = {}) {
@@ -1061,6 +1205,150 @@ function generateParticleConvergeCSS(config) {
 
 // Helper function to generate ParticleConverge JS
 function generateParticleConvergeJS(config) {
+    // Make sure createParticleConverge is defined globally
+    if (!window.createParticleConverge) {
+        window.createParticleConverge = function (config = {}) {
+            // Default configuration
+            const defaultConfig = {
+                color: config.color || "blue",
+                shade: config.shade || 500,
+                size: "48px",
+                speed: config.speed || 1.0,
+            };
+
+            // Merge configurations
+            const mergedConfig = { ...defaultConfig, ...config };
+
+            // Create container
+            const container = document.createElement("div");
+            container.className = "cxc-particle-converge";
+            container.style.position = "relative";
+            container.style.width = mergedConfig.size;
+            container.style.height = mergedConfig.size;
+
+            // Get animation duration based on speed
+            const duration = (1.8 / mergedConfig.speed).toFixed(2) + "s";
+
+            // Helper function to adjust color brightness
+            function adjustColor(color, amount) {
+                // Convert hex to RGB
+                let r, g, b;
+                if (color.startsWith("#")) {
+                    const hex = color.substring(1);
+                    r = parseInt(hex.substring(0, 2), 16);
+                    g = parseInt(hex.substring(2, 4), 16);
+                    b = parseInt(hex.substring(4, 6), 16);
+                } else if (color.startsWith("rgb")) {
+                    const match = color.match(/rgba?\(\d+,\s*\d+,\s*\d+(?:,\s*[\d.]+)?\)/);
+                    if (match) {
+                        r = parseInt(match[1]);
+                        g = parseInt(match[2]);
+                        b = parseInt(match[3]);
+                    } else {
+                        return color;
+                    }
+                } else {
+                    return color;
+                }
+
+                // Adjust brightness
+                r = Math.max(0, Math.min(255, r + amount));
+                g = Math.max(0, Math.min(255, g + amount));
+                b = Math.max(0, Math.min(255, b + amount));
+
+                return `rgb(${r}, ${g}, ${b})`;
+            }
+
+            // Helper function to get RGB values from color
+            function getRGBValues(color) {
+                // Convert hex to RGB
+                let r, g, b;
+                if (color.startsWith("#")) {
+                    const hex = color.substring(1);
+                    r = parseInt(hex.substring(0, 2), 16);
+                    g = parseInt(hex.substring(2, 4), 16);
+                    b = parseInt(hex.substring(4, 6), 16);
+                    return `${r}, ${g}, ${b}`;
+                } else if (color.startsWith("rgb")) {
+                    const match = color.match(/rgba?\(\d+,\s*\d+,\s*\d+(?:,\s*[\d.]+)?\)/);
+                    if (match) {
+                        return `${match[1]}, ${match[2]}, ${match[3]}`;
+                    }
+                }
+                return "50, 196, 141"; // Default fallback
+            }
+
+            // Define particle positions - shifted right 30px and down 30px
+            const positions = [
+                { x: 0, y: 0, delay: 0 },
+                { x: 60, y: 5, delay: 0.2 },
+                { x: -5, y: 35, delay: 0.4 },
+                { x: 65, y: 55, delay: 0.6 },
+                { x: 5, y: 60, delay: 0.8 },
+                { x: 55, y: 0, delay: 1 },
+                { x: 30, y: -5, delay: 1.2 },
+                { x: 0, y: 25, delay: 1.4 },
+                { x: 60, y: 45, delay: 1.6 },
+                { x: 50, y: 60, delay: 1.8 },
+                { x: 5, y: 10, delay: 2 },
+                { x: 40, y: 55, delay: 2.2 },
+            ];
+
+            // Create particles
+            const color = CXCLoader.getColor(mergedConfig.color, mergedConfig.shade);
+            const darkerColor = adjustColor(color, -20);
+            const rgbValues = getRGBValues(color);
+
+            for (let i = 0; i < positions.length; i++) {
+                const particle = document.createElement("div");
+                particle.className = "cxc-particle";
+
+                // Set styles
+                particle.style.position = "absolute";
+                particle.style.width = "7px";
+                particle.style.height = "7px";
+                particle.style.background = `radial-gradient(circle at center, ${color}, ${darkerColor})`;
+                particle.style.borderRadius = "50%";
+                particle.style.opacity = "0";
+                particle.style.boxShadow = `0 0 7px rgba(${rgbValues}, 0.4)`;
+
+                // Set animation with custom properties
+                particle.style.setProperty("--x", `${positions[i].x}px`);
+                particle.style.setProperty("--y", `${positions[i].y}px`);
+                particle.style.animation = `cxc-float-in ${duration} cubic-bezier(0.42, 0, 0.58, 1) infinite`;
+                particle.style.animationDelay = `${positions[i].delay}s`;
+
+                container.appendChild(particle);
+            }
+
+            // Add keyframes if they don't exist
+            if (!document.getElementById("cxc-float-in-keyframes")) {
+                const style = document.createElement("style");
+                style.id = "cxc-float-in-keyframes";
+                style.textContent = `
+                    @keyframes cxc-float-in {
+                        0% {
+                            transform: translate(var(--x), var(--y)) scale(0.3);
+                            opacity: 0;
+                            filter: blur(2px);
+                        }
+                        40% {
+                            opacity: 1;
+                            filter: blur(0px);
+                        }
+                        100% {
+                            transform: translate(0, 0) scale(1);
+                            opacity: 0;
+                            filter: blur(1px);
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            return container;
+        };
+    }
     return `
 // Create a particle converge loader
 function createParticleConverge(config = {}) {
