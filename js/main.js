@@ -75,14 +75,10 @@ function initLoaderCards() {
         return categoryMatch && searchMatch;
     });
 
-    // Sort loaders by category and then by tag
+    // Sort loaders by creation date (newest first)
     filteredLoaders.sort((a, b) => {
-        // First sort by category
-        if (a.category !== b.category) {
-            return a.category.localeCompare(b.category);
-        }
-        // Then sort by tag
-        return a.tag.localeCompare(b.tag);
+        // Sort by creation date (newest first)
+        return new Date(b.createdAt) - new Date(a.createdAt);
     });
 
     // Display message if no loaders match the filters
@@ -712,6 +708,9 @@ function initSpeedControl() {
 function initCategoryFilter() {
     const categoryButtons = document.querySelectorAll(".category-btn");
 
+    // Calculate and add category counts
+    updateCategoryCounts(categoryButtons);
+
     categoryButtons.forEach((button) => {
         button.addEventListener("click", () => {
             // Update selected category
@@ -726,6 +725,40 @@ function initCategoryFilter() {
             // Reinitialize loader cards
             initLoaderCards();
         });
+    });
+}
+
+// Update category counts
+function updateCategoryCounts(categoryButtons) {
+    // Count loaders by category
+    const categoryCounts = {};
+
+    // Count total loaders
+    let totalCount = loaderData.length;
+
+    // Count loaders in each category
+    loaderData.forEach((loader) => {
+        if (!categoryCounts[loader.category]) {
+            categoryCounts[loader.category] = 0;
+        }
+        categoryCounts[loader.category]++;
+    });
+
+    // Update category buttons with counts
+    categoryButtons.forEach((button) => {
+        const category = button.dataset.category;
+        const count = category === "all" ? totalCount : categoryCounts[category] || 0;
+
+        // Create count element if it doesn't exist
+        let countElement = button.querySelector(".category-count");
+        if (!countElement) {
+            countElement = document.createElement("span");
+            countElement.className = "category-count";
+            button.appendChild(countElement);
+        }
+
+        // Update count text
+        countElement.textContent = count;
     });
 }
 
@@ -1660,6 +1693,22 @@ function verifyLoaderSystem() {
     }
 }
 
+// Handle page loading animation
+function handlePageLoading() {
+    const pageLoader = document.getElementById("pageLoader");
+    if (!pageLoader) return;
+
+    // Hide the loader after initialization is complete
+    setTimeout(() => {
+        pageLoader.classList.add("hidden");
+
+        // Remove the loader from DOM after animation completes
+        setTimeout(() => {
+            pageLoader.remove();
+        }, 500);
+    }, 2000); // Show loader for at least 2 seconds
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener("DOMContentLoaded", function () {
     console.log("DOM loaded, initializing application");
@@ -1687,5 +1736,8 @@ document.addEventListener("DOMContentLoaded", function () {
         initCodeTabs();
         initCopyButtons();
         initModalClose();
+
+        // Handle page loading animation
+        handlePageLoading();
     }, 1500);
 });

@@ -5,12 +5,28 @@
 
 const loaderData = [
     {
+        id: "spinner-circular",
+        category: "spinner",
+        name: "Circular Spinner",
+        tag: "S-004",
+        createdAt: "2024-06-28",
+        totalIndex: 1,
+    },
+    {
+        id: "progress-segments",
+        category: "progress",
+        name: "Segmented Progress",
+        tag: "PB-002",
+        createdAt: "2024-06-27",
+        totalIndex: 2,
+    },
+    {
         id: "grid-perimeter",
         category: "grid",
         name: "Perimeter Blink",
         tag: "G-013",
         createdAt: "2023-06-22",
-        totalIndex: 1,
+        totalIndex: 3,
     },
     {
         id: "grid-step",
@@ -18,7 +34,7 @@ const loaderData = [
         name: "Step Flash",
         tag: "G-012",
         createdAt: "2023-06-21",
-        totalIndex: 2,
+        totalIndex: 4,
     },
     {
         id: "grid-wave",
@@ -26,7 +42,7 @@ const loaderData = [
         name: "Wave Sweep",
         tag: "G-011",
         createdAt: "2023-06-20",
-        totalIndex: 3,
+        totalIndex: 5,
     },
     {
         id: "grid-revCol",
@@ -34,7 +50,7 @@ const loaderData = [
         name: "Reverse Col",
         tag: "G-010",
         createdAt: "2023-06-19",
-        totalIndex: 4,
+        totalIndex: 6,
     },
     {
         id: "grid-revRow",
@@ -42,7 +58,7 @@ const loaderData = [
         name: "Reverse Row",
         tag: "G-009",
         createdAt: "2023-06-18",
-        totalIndex: 5,
+        totalIndex: 7,
     },
     {
         id: "grid-center",
@@ -50,7 +66,7 @@ const loaderData = [
         name: "Center Out",
         tag: "G-008",
         createdAt: "2023-06-17",
-        totalIndex: 6,
+        totalIndex: 8,
     },
     {
         id: "grid-col",
@@ -58,7 +74,7 @@ const loaderData = [
         name: "Column Pulse",
         tag: "G-007",
         createdAt: "2023-06-16",
-        totalIndex: 7,
+        totalIndex: 9,
     },
     {
         id: "grid-row",
@@ -66,7 +82,7 @@ const loaderData = [
         name: "Row Pulse",
         tag: "G-006",
         createdAt: "2023-06-15",
-        totalIndex: 8,
+        totalIndex: 10,
     },
     {
         id: "grid-spiral",
@@ -74,7 +90,7 @@ const loaderData = [
         name: "Spiral Inward",
         tag: "G-005",
         createdAt: "2023-06-14",
-        totalIndex: 9,
+        totalIndex: 11,
     },
     {
         id: "grid-diag",
@@ -82,7 +98,7 @@ const loaderData = [
         name: "Diagonal Sweep",
         tag: "G-004",
         createdAt: "2023-06-13",
-        totalIndex: 10,
+        totalIndex: 12,
     },
     {
         id: "grid-flicker",
@@ -90,7 +106,7 @@ const loaderData = [
         name: "Grid Flicker",
         tag: "G-003",
         createdAt: "2023-06-12",
-        totalIndex: 11,
+        totalIndex: 13,
     },
     {
         id: "grid-breathing",
@@ -98,7 +114,7 @@ const loaderData = [
         name: "Breathing Center",
         tag: "G-002",
         createdAt: "2023-06-11",
-        totalIndex: 12,
+        totalIndex: 14,
     },
     {
         id: "grid-flow",
@@ -106,7 +122,7 @@ const loaderData = [
         name: "Grid Flow",
         tag: "G-001",
         createdAt: "2023-06-10",
-        totalIndex: 13,
+        totalIndex: 15,
     },
     {
         id: "jelly-fractal",
@@ -114,7 +130,7 @@ const loaderData = [
         name: "Jelly Fractal",
         tag: "J-002",
         createdAt: "2023-06-09",
-        totalIndex: 4,
+        totalIndex: 16,
     },
     {
         id: "synaptic-pulse",
@@ -122,7 +138,7 @@ const loaderData = [
         name: "Synaptic Pulse",
         tag: "SY-001",
         createdAt: "2023-06-08",
-        totalIndex: 1,
+        totalIndex: 17,
     },
     {
         id: "tail-blink",
@@ -130,7 +146,7 @@ const loaderData = [
         name: "Tail Blink",
         tag: "T-001",
         createdAt: "2023-06-07",
-        totalIndex: 2,
+        totalIndex: 18,
     },
     {
         id: "ripple-portal",
@@ -138,7 +154,7 @@ const loaderData = [
         name: "Portal Ripple",
         tag: "R-003",
         createdAt: "2023-06-06",
-        totalIndex: 3,
+        totalIndex: 19,
     },
     {
         id: "particle-flow",
@@ -146,7 +162,7 @@ const loaderData = [
         name: "Particle Flow",
         tag: "PA-001",
         createdAt: "2023-06-05",
-        totalIndex: 4,
+        totalIndex: 20,
     },
     {
         id: "jelly-merge",
@@ -154,7 +170,7 @@ const loaderData = [
         name: "Jelly Merge",
         tag: "J-001",
         createdAt: "2023-06-04",
-        totalIndex: 5,
+        totalIndex: 21,
     },
     {
         id: "ripple-soft",
@@ -162,7 +178,7 @@ const loaderData = [
         name: "Soft Ripple",
         tag: "R-002",
         createdAt: "2023-06-03",
-        totalIndex: 6,
+        totalIndex: 22,
     },
     {
         id: "pulse-particle-converge",
@@ -170,7 +186,7 @@ const loaderData = [
         name: "Particle Converge",
         tag: "P-004",
         createdAt: "2023-06-02",
-        totalIndex: 7,
+        totalIndex: 23,
     },
     {
         id: "pulse-whisper-float",
@@ -178,7 +194,7 @@ const loaderData = [
         name: "Whisper Float",
         tag: "P-003",
         createdAt: "2023-06-01",
-        totalIndex: 8,
+        totalIndex: 24,
     },
     {
         id: "ripple-basic",
@@ -186,7 +202,7 @@ const loaderData = [
         name: "Basic Ripple",
         tag: "R-001", // R for Ripple
         createdAt: "2023-05-25",
-        totalIndex: 9,
+        totalIndex: 25,
     },
     {
         id: "progress-bar",
@@ -194,7 +210,7 @@ const loaderData = [
         name: "Progress Bar",
         tag: "PB-001", // PB for Progress Bar
         createdAt: "2023-05-24",
-        totalIndex: 10,
+        totalIndex: 26,
     },
     {
         id: "dots-fade",
@@ -202,7 +218,7 @@ const loaderData = [
         name: "Fading Dots",
         tag: "D-003",
         createdAt: "2023-05-23",
-        totalIndex: 11,
+        totalIndex: 27,
     },
     {
         id: "dots-bounce",
@@ -210,7 +226,7 @@ const loaderData = [
         name: "Bouncing Dots",
         tag: "D-002",
         createdAt: "2023-05-22",
-        totalIndex: 12,
+        totalIndex: 28,
     },
     {
         id: "dots-basic",
@@ -218,7 +234,7 @@ const loaderData = [
         name: "Basic Dots",
         tag: "D-001",
         createdAt: "2023-05-21",
-        totalIndex: 13,
+        totalIndex: 29,
     },
     {
         id: "pulse-wave",
@@ -226,7 +242,7 @@ const loaderData = [
         name: "Wave Pulse",
         tag: "P-002",
         createdAt: "2023-05-19",
-        totalIndex: 14,
+        totalIndex: 30,
     },
     {
         id: "pulse-basic",
@@ -234,7 +250,7 @@ const loaderData = [
         name: "Basic Pulse",
         tag: "P-001", // P for Pulse
         createdAt: "2023-05-18",
-        totalIndex: 15,
+        totalIndex: 31,
     },
     {
         id: "spinner-triple",
@@ -242,7 +258,7 @@ const loaderData = [
         name: "Triple Spinner",
         tag: "S-003",
         createdAt: "2023-05-17",
-        totalIndex: 16,
+        totalIndex: 32,
     },
     {
         id: "spinner-dual",
@@ -250,7 +266,7 @@ const loaderData = [
         name: "Dual Spinner",
         tag: "S-002",
         createdAt: "2023-05-16",
-        totalIndex: 17,
+        totalIndex: 33,
     },
     {
         id: "spinner-basic",
@@ -258,6 +274,6 @@ const loaderData = [
         name: "Basic Spinner",
         tag: "S-001", // S for Spinner, 001 is the first in Spinner category
         createdAt: "2023-05-15", // Creation date (for sorting)
-        totalIndex: 18, // Overall index across all loaders
+        totalIndex: 34, // Overall index across all loaders
     },
 ];

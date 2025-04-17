@@ -1,0 +1,46 @@
+/**
+ * CXC-Loader - Category Count Badges
+ * Displays the number of loaders in each category
+ */
+
+.category-btn {
+    position: relative;
+    padding-right: 30px !important; /* Make room for the count badge */
+}
+
+.category-count {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.1);
+    color: inherit;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 1px 5px;
+    border-radius: 10px;
+    min-width: 16px;
+    text-align: center;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-btn:hover .category-count {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.category-btn.active .category-count {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+/* Dark mode support */
+.dark-mode .category-count {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.dark-mode .category-btn:hover .category-count {
+    background-color: rgba(255, 255, 255, 0.25);
+}
